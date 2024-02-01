@@ -3,6 +3,6 @@
 - name: Linear Dynamical Systems
   items:
     - name: Kinematics
-    items:
+      items:
       - name: Simulated Data
         href: ../examples/LinearDynamicalSystems/Kinematics/SimulatedData/README.md
