@@ -17,6 +17,5 @@ Gallery
 *.settings
 *.csv
 *.bin
-activate
-deactivate
 *.csproj
+__pycache__
