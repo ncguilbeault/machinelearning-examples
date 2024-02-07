@@ -7,7 +7,7 @@ In the following example, you can find how the Kalman Filter can be used for kin
 Below is the workflow for running the Kalman Filter Kinematics model on simulated data.
 
 :::workflow
-![Inferring Kinematics - Simulation](Simulation.bonsai)
+![Kinematics - Simulated Data](Simulation.bonsai)
 :::
 
 In this example, we created a Kalman Filter for infering kinematics from simulated data. We created a property called `SamplingFrequency` which dictates both the time step parameter of our model and also determines the rate at which the new simulated data values are generated.
