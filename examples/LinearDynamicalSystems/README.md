@@ -1,15 +1,10 @@
 # Getting Started
 
-### Dependencies
+In general, when using the LinearDynamicalSystems package, you need to configure your Bonsai workflow to run the correct python environment which has the [lds_python](https://github.com/joacorapela/lds_python) package was installed. 
 
-To run the examples, you must have the following tools installed:
+All of the examples provided are self-contained, such that you can bootstrap the python and Bonsai environments from within each example directory. Below, we demonstrate how to bootstrap the environments provided in the example folders to run the LinearDynamicalSystems package.
 
-- [Python (v3.10.12)](https://www.python.org/downloads/)
-- [Powershell on Linux](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-linux?view=powershell-7.4)
-
-### Running Examples
-
-All of the examples are self-contained and only bootstrapping the python and Bonsai environments. 
+### Windows
 
 To bootstrap the python virtual environment, change directory to the example folder and run the following:
 
@@ -25,7 +20,7 @@ To install and configure the bonsai environment, run:
 powershell .bonsai\Setup.ps1
 ```
 
-Once installed, activate and run the bonsai environment with:
+Once installed, run the bonsai application with:
 
 ```cmd
 .bonsai\Bonsai.exe

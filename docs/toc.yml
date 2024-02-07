@@ -8,3 +8,5 @@
       items:
       - name: Simulated Data
         href: ../examples/LinearDynamicalSystems/Kinematics/SimulatedData/README.md
+      - name: Zebrafish Centroid Tracking
+        href: ../examples/LinearDynamicalSystems/Kinematics/ZebrafishCentroidTracking/README.md

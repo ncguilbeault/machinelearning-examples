@@ -6,10 +6,10 @@
                  xmlns:num="clr-namespace:Bonsai.Numerics;assembly=Bonsai.Numerics"
                  xmlns:p1="clr-namespace:Bonsai.Numerics.Distributions;assembly=Bonsai.Numerics"
                  xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
+                 xmlns:viz="clr-namespace:Bonsai.Design.Visualizers;assembly=Bonsai.Design.Visualizers"
                  xmlns:drw="clr-namespace:Bonsai.Vision.Drawing;assembly=Bonsai.Vision"
                  xmlns:ipy="clr-namespace:Bonsai.Scripting.IronPython;assembly=Bonsai.Scripting.IronPython"
                  xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
-                 xmlns:viz="clr-namespace:Bonsai.Design.Visualizers;assembly=Bonsai.Design.Visualizers"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
@@ -101,7 +101,7 @@
                   </Expression>
                   <Expression xsi:type="Add">
                     <Operand xsi:type="DoubleProperty">
-                      <Value>-0.11640472758105361</Value>
+                      <Value>-0.32641279514703364</Value>
                     </Operand>
                   </Expression>
                   <Expression xsi:type="WorkflowOutput" />
@@ -148,7 +148,7 @@
                   </Expression>
                   <Expression xsi:type="Add">
                     <Operand xsi:type="DoubleProperty">
-                      <Value>0.014037943274925758</Value>
+                      <Value>-0.162387803661707</Value>
                     </Operand>
                   </Expression>
                   <Expression xsi:type="WorkflowOutput" />
@@ -350,8 +350,8 @@
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="drw:Circle">
                       <drw:Center>
-                        <drw:X>395</drw:X>
-                        <drw:Y>262</drw:Y>
+                        <drw:X>52</drw:X>
+                        <drw:Y>136</drw:Y>
                       </drw:Center>
                       <drw:Radius>5</drw:Radius>
                       <drw:Color>
@@ -402,8 +402,8 @@
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="drw:Circle">
                       <drw:Center>
-                        <drw:X>415</drw:X>
-                        <drw:Y>263</drw:Y>
+                        <drw:X>91</drw:X>
+                        <drw:Y>149</drw:Y>
                       </drw:Center>
                       <drw:Radius>5</drw:Radius>
                       <drw:Color>
@@ -476,8 +476,8 @@ def process(value):
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="drw:Ellipse">
                       <drw:Center>
-                        <drw:X>415</drw:X>
-                        <drw:Y>263</drw:Y>
+                        <drw:X>91</drw:X>
+                        <drw:Y>149</drw:Y>
                       </drw:Center>
                       <drw:Axes>
                         <drw:Width>97</drw:Width>
