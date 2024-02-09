@@ -2,6 +2,7 @@
 unset BONSAI_EXE_PATH
 export PS1="$ORIGINAL_PS1"
 unset ORIGINAL_PS1
+unset NUGET_CONFIG
 unalias bonsai
 unalias bonsai-clean
 unalias deactivate
