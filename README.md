@@ -2,6 +2,6 @@
 
 The Bonsai.ML project is a collection of packages built to target the Bonsai-Rx ecosystem, providing reactive infrastructure for machine learning operations.
 
-We provide examples/demos for how to get started using the suite of Bonsai.ML packages that are currently available. We provide documentation for each example to illustrute how Bonsai.ML modules/workflows can be incorporated into Bonsai-Rx workflows.
+In the [Bonsai.ML - Examples](https://github.com/ncguilbeault/machinelearning-examples) repo, we provide example workflows, datasets, and demos for how to get started using the suite of Bonsai.ML packages that are currently available. We provide documentation for each example to illustrute how Bonsai.ML can be incorporated into Bonsai workflows.
 
-Check out the Getting Started page in each section if you would like to run the example workflows yourself.
+For each Bonsai.ML package, check out the Getting Started page to learn abou how to run the example workflows yourself.

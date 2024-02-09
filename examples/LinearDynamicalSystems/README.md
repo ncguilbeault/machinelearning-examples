@@ -2,11 +2,23 @@
 
 In general, when using the LinearDynamicalSystems package, you need to configure your Bonsai workflow to run the correct python environment which has the [lds_python](https://github.com/joacorapela/lds_python) package was installed. 
 
-All of the examples provided are self-contained, such that you can bootstrap the python and Bonsai environments from within each example directory. Below, we demonstrate how to bootstrap the environments provided in the example folders to run the LinearDynamicalSystems package.
+All of the examples are self-contained and can be found by going to the [Bonsai.ML - Examples](https://github.com/ncguilbeault/machinelearning-examples) repo. For each example, you can bootstrap the python and Bonsai environments from within each example directory. Below, we demonstrate how to bootstrap the the example environments.
 
-### Windows
+### Bootstrapping Environments
 
-To bootstrap the python virtual environment, change directory to the example folder and run the following:
+Start by cloning the [Bonsai.ML - Examples](https://github.com/ncguilbeault/machinelearning-examples) repo:
+
+```cmd
+git clone https://github.com/ncguilbeault/machinelearning-examples.git
+```
+
+Change directory to one of the examples. For instance:
+
+```cmd
+cd examples/LinearDynamicalSystems/Kinematics/SimulatedData
+```
+
+To bootstrap the python virtual environment, run the following:
 
 ```cmd
 python -m venv .venv 
@@ -14,7 +26,7 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-To install and configure the bonsai environment, run:
+To bootstrap the bonsai environment, run:
 
 ```cmd
 powershell .bonsai\Setup.ps1
@@ -26,4 +38,4 @@ Once installed, run the bonsai application with:
 .bonsai\Bonsai.exe
 ```
 
-Open the specific workflow example and start the bonsai workflow.
+Open the workflow example and start the bonsai workflow.
