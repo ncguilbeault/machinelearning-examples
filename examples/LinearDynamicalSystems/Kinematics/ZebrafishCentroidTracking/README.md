@@ -8,16 +8,16 @@ In the following example, you can find how the Kalman Filter can be used to infe
 
 If you used the bootstrapping method, you dont have to worry about the package dependencies, as these should be already installed. However, if creating a new environment or integrating into an existing one, you will need to install the following packages:
 
-* Bonsai.Core v2.8.1
-* Bonsai.Design v2.8.0
-* Bonsai.Editor v2.8.0
-* Bonsai.ML v0.1.0
-* Bonsai.ML.LinearDynamicalSystems v0.1.0
-* Bonsai.ML.Visualizers v0.1.0
-* Bonsai.Scripting v2.8.0
-* Bonsai.Scripting.Python v0.2.0
-* Bonsai.Vision v2.8.1
-* Bonsai.Vision.Design v2.8.1
+* Bonsai - Core v2.8.1
+* Bonsai - Design v2.8.0
+* Bonsai - Editor v2.8.0
+* Bonsai - ML v0.1.0
+* Bonsai - ML LinearDynamicalSystems v0.1.0
+* Bonsai - ML Visualizers v0.1.0
+* Bonsai - Scripting v2.8.0
+* Bonsai - Scripting Python v0.2.0
+* Bonsai - Vision v2.8.1
+* Bonsai - Vision Design v2.8.1
 
 ### Dataset
 
