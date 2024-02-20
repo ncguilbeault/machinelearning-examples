@@ -62,21 +62,27 @@ To bootstrap the python virtual environment, run the following:
 ```cmd
 python3 -m venv .venv 
 source .venv/bin/activate
-pip install -r requirements.txt
+pip install lds_python@git+https://github.com/joacorapela/lds_python@168d4c05bb4b014998c7d3a2a57d143244a44bdd
 ```
 
-To bootstrap the bonsai environment, run:
+To bootstrap the bonsai environment using the `Setup.sh` script, you need to have the `xmllint` and the `xmlstarlet` packages, which you can install with:
+
+```cmd
+sudo apt install -y libxml2-utils xmlstarlet
+```
+
+Once these packages are installed, you can do the following:
 
 ```cmd
 cd .bonsai
-pwsh Setup.ps1
+.\Setup.sh
 ```
 
-Once installed, activate the bonsai environment and run:
+Once the bonsai environment has been created, activate the bonsai environment and run:
 
 ```cmd
 cd ..
-source .bonsai/activate
+source ./activate
 bonsai
 ```
 
