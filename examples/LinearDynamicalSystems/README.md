@@ -12,7 +12,7 @@ All of the examples are self-contained and can be found by going to the [Bonsai.
 
 You must have the following installed on your PC in order to run the example workflows:
 
-- [Python (v3.10)](https://www.python.org/downloads/) *Note: python must be installed using the windows installer and must added to the system PATH*
+- [Python (v3.10)](https://www.python.org/downloads/) *Note: python must be installed using the windows installer and must be added to the system PATH*
 - [Git](https://git-scm.com/downloads)
 - [Microsoft Visual C++ Redistributable](https://aka.ms/vs/16/release/vc_redist.x64.exe)
 
@@ -63,14 +63,18 @@ Open the workflow example and start the bonsai workflow.
 
 ### Linux
 
+#### Notes on Running Bonsai in Linux
+
+Currently, the examples have only been tested on Ubuntu 22.04. Running Bonsai on Linux is still being tested and sheould be used with caution. When running the example workflows in Linux, it is important that you follow the general [Bonsai installation guide on Linux](https://github.com/orgs/bonsai-rx/discussions/1101) to ensure that the underlying Bonsai package dependencies are available to the system.
+
 #### Dependencies
 
 You must have the following installed on your PC in order to run the example workflows:
 
-- [Python (v3.10)](https://www.python.org/downloads/) *comes installed with latest version of Ubuntu 22.04*
-- [Git](https://git-scm.com/downloads) *also comes installed with Ubuntu 22.04*
+- [Python (v3.10)](https://www.python.org/downloads/) *comes installed with the latest version of Ubuntu 22.04*
+- [Git](https://git-scm.com/downloads)
 - [Mono](https://www.mono-project.com/download/stable/#download-lin)
-- [OpenCV binaries](https://github.com/orgs/bonsai-rx/discussions/1101) *see bottom of discussion for latest instructions on building OpenCV from source on Ubuntu 22.04*
+- [OpenCV binaries](https://github.com/orgs/bonsai-rx/discussions/1101) *the simplest method is to follow the instructions on installing OpenCV from pre-built binaries*
 
 #### Instructions
 
@@ -127,7 +131,3 @@ mono Bonsai.exe
 ```
 
 Open the workflow example and start the bonsai workflow.
-
-#### Notes on Running Bonsai in Linux
-
-Currently, the examples have only been tested on Ubuntu 22.04. Running Bonsai on Linux is still being tested and should be used with caution. When running the example workflows in Linux, it is important that you follow the general [Bonsai installation guide on Linux](https://github.com/orgs/bonsai-rx/discussions/1101) to ensure that the underlying Bonsai package dependencies are available to the system.
