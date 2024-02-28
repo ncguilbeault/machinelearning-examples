@@ -20,7 +20,7 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="cv:FileCapture">
-                <cv:FileName>../../../../datasets/CameraTop_2022-06-21T13-00-00.avi</cv:FileName>
+                <cv:FileName>../../../../datasets/ForagingMouseExampleVid.avi</cv:FileName>
                 <cv:PlaybackRate>0</cv:PlaybackRate>
                 <cv:StartPosition>0</cv:StartPosition>
                 <cv:PositionUnits>Frames</cv:PositionUnits>
@@ -345,8 +345,8 @@
       <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.LinearDynamicalSystems:Kinematics.CreateKFModel.bonsai">
         <ModelName>model</ModelName>
         <Fps>50</Fps>
-        <Pos_x0>587.87939453125</Pos_x0>
-        <Pos_y0>262.60833740234375</Pos_y0>
+        <Pos_x0>752.05389404296875</Pos_x0>
+        <Pos_y0>351.8336181640625</Pos_y0>
         <Vel_x0>0</Vel_x0>
         <Vel_y0>0</Vel_y0>
         <Acc_x0>0</Acc_x0>
@@ -369,7 +369,7 @@
         <Name>Observation</Name>
       </Expression>
       <Expression xsi:type="SubscribeSubject">
-        <Name>TrackingStarted</Name>
+        <Name>ModelParameters</Name>
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:SkipUntil" />
@@ -465,8 +465,8 @@
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="drw:CreateCanvas">
                 <drw:Size>
-                  <drw:Width>1440</drw:Width>
-                  <drw:Height>1080</drw:Height>
+                  <drw:Width>800</drw:Width>
+                  <drw:Height>600</drw:Height>
                 </drw:Size>
                 <drw:Depth>U8</drw:Depth>
                 <drw:Channels>3</drw:Channels>
@@ -532,8 +532,8 @@
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="drw:Circle">
                       <drw:Center>
-                        <drw:X>588</drw:X>
-                        <drw:Y>262</drw:Y>
+                        <drw:X>752</drw:X>
+                        <drw:Y>351</drw:Y>
                       </drw:Center>
                       <drw:Radius>5</drw:Radius>
                       <drw:Color>
@@ -634,8 +634,8 @@ def process(value):
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="drw:Circle">
                       <drw:Center>
-                        <drw:X>588</drw:X>
-                        <drw:Y>262</drw:Y>
+                        <drw:X>752</drw:X>
+                        <drw:Y>351</drw:Y>
                       </drw:Center>
                       <drw:Radius>5</drw:Radius>
                       <drw:Color>
