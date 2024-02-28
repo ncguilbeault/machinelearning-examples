@@ -20,3 +20,4 @@ Gallery
 *.csproj
 __pycache__
 .env.local
+.bonsai/
