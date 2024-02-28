@@ -10,3 +10,5 @@
         href: ../examples/LinearDynamicalSystems/Kinematics/SimulatedData/README.md
       - name: Zebrafish Centroid Tracking
         href: ../examples/LinearDynamicalSystems/Kinematics/ZebrafishCentroidTracking/README.md
+      - name: Foraging Mouse
+        href: ../examples/LinearDynamicalSystems/Kinematics/ForagingMouse/README.md
