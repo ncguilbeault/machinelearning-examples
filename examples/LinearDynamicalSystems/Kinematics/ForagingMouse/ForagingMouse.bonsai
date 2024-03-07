@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <WorkflowBuilder Version="2.8.1"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                 xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
-                 xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
                  xmlns:py="clr-namespace:Bonsai.Scripting.Python;assembly=Bonsai.Scripting.Python"
+                 xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
+                 xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
                  xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
                  xmlns:viz="clr-namespace:Bonsai.Design.Visualizers;assembly=Bonsai.Design.Visualizers"
                  xmlns:drw="clr-namespace:Bonsai.Vision.Drawing;assembly=Bonsai.Vision"
@@ -11,6 +11,16 @@
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="py:CreateRuntime" />
+      </Expression>
+      <Expression xsi:type="rx:BehaviorSubject">
+        <Name>RuntimeEngine</Name>
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>RuntimeEngine</Name>
+      </Expression>
+      <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.LinearDynamicalSystems:LoadLDSModule.bonsai" />
       <Expression xsi:type="GroupWorkflow">
         <Name>MouseTracking</Name>
         <Workflow>
@@ -300,16 +310,6 @@
       <Expression xsi:type="rx:BehaviorSubject">
         <Name>Centroid</Name>
       </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="py:CreateRuntime" />
-      </Expression>
-      <Expression xsi:type="rx:BehaviorSubject">
-        <Name>RuntimeEngine</Name>
-      </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>RuntimeEngine</Name>
-      </Expression>
-      <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.LinearDynamicalSystems:LoadLDSModule.bonsai" />
       <Expression xsi:type="SubscribeSubject">
         <Name>Centroid</Name>
       </Expression>
@@ -359,10 +359,10 @@
         <Property Name="Fps" />
       </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.LinearDynamicalSystems:Kinematics.CreateKFModel.bonsai">
-        <ModelName>model</ModelName>
+        <Name>model</Name>
         <Fps>50</Fps>
-        <Pos_x0>741.45440673828125</Pos_x0>
-        <Pos_y0>279.1834716796875</Pos_y0>
+        <Pos_x0>640.20025634765625</Pos_x0>
+        <Pos_y0>462.7911376953125</Pos_y0>
         <Vel_x0>0</Vel_x0>
         <Vel_y0>0</Vel_y0>
         <Acc_x0>0</Acc_x0>
@@ -391,7 +391,7 @@
         <Combinator xsi:type="rx:SkipUntil" />
       </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.LinearDynamicalSystems:Kinematics.PerformInference.bonsai">
-        <ModelName>model</ModelName>
+        <Name>model</Name>
       </Expression>
       <Expression xsi:type="MemberSelector">
         <Selector>Position</Selector>
@@ -548,8 +548,8 @@
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="drw:Circle">
                       <drw:Center>
-                        <drw:X>324</drw:X>
-                        <drw:Y>146</drw:Y>
+                        <drw:X>514</drw:X>
+                        <drw:Y>219</drw:Y>
                       </drw:Center>
                       <drw:Radius>5</drw:Radius>
                       <drw:Color>
@@ -650,8 +650,8 @@ def process(value):
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="drw:Circle">
                       <drw:Center>
-                        <drw:X>324</drw:X>
-                        <drw:Y>146</drw:Y>
+                        <drw:X>516</drw:X>
+                        <drw:Y>218</drw:Y>
                       </drw:Center>
                       <drw:Radius>5</drw:Radius>
                       <drw:Color>
