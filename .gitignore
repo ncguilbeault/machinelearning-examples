@@ -7,15 +7,9 @@ obj
 *.exe
 *.dll
 *.layout
+*.exe.*
 .venv
-*.bak
-.bak
-.config
 Packages
-Extensions
-Gallery
-*.settings
 *.csv
 *.bin
-*.csproj
 __pycache__

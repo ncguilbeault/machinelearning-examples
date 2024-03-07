@@ -1,0 +1,14 @@
+- name: Overview
+  href: ../README.md
+- name: Linear Dynamical Systems
+  items:
+    - name: Getting Started
+      href: ../examples/LinearDynamicalSystems/README.md
+    - name: Kinematics
+      items:
+      - name: Simulated Data
+        href: ../examples/LinearDynamicalSystems/Kinematics/SimulatedData/README.md
+      - name: Zebrafish Centroid Tracking
+        href: ../examples/LinearDynamicalSystems/Kinematics/ZebrafishCentroidTracking/README.md
+      - name: Foraging Mouse
+        href: ../examples/LinearDynamicalSystems/Kinematics/ForagingMouse/README.md
