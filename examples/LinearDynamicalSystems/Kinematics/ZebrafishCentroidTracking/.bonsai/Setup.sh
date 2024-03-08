@@ -1,5 +1,9 @@
 #! /bin/bash
 
+CURRENT_DIR="$(pwd)"
+SETUP_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
+cd $SETUP_SCRIPT_DIR
+
 if [ ! -f "./Bonsai.exe" ]; then
     CONFIG="./Bonsai.config"
     if [ -f "$CONFIG" ]; then
@@ -33,3 +37,4 @@ if [ -f "./Bonsai.config" ]; then
 fi
 
 mono Bonsai.exe --no-editor
+cd $CURRENT_DIR
