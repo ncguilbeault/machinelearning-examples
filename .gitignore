@@ -8,8 +8,10 @@ obj
 *.dll
 *.layout
 *.exe.*
+*.svg
 .venv
 Packages
+Gallery
 *.csv
 *.bin
 __pycache__
