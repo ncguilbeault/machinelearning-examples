@@ -1,6 +1,6 @@
 # Simulated Data
 
-The code for this repo can be found [here](https://github.com/ncguilbeault/machinelearning-examples/tree/lds-examples/examples/LinearDynamicalSystems/Kinematics/SimulatedData).
+The code for this repo can be found [here](https://github.com/bonsai-rx/machinelearning-examples/tree/main/examples/LinearDynamicalSystems/Kinematics/SimulatedData).
 
 In the following example, you can find how the Kalman Filter can be used for kinematic inference using simulated data.
 

@@ -1,6 +1,6 @@
 # Foraging Mouse Example
 
-The code for this repo can be found [here](https://github.com/ncguilbeault/machinelearning-examples/tree/lds-examples/examples/LinearDynamicalSystems/Kinematics/ForagingMouse).
+The code for this repo can be found [here](https://github.com/bonsai-rx/machinelearning-examples/tree/main/examples/LinearDynamicalSystems/Kinematics/ForagingMouse).
 
 In the following example, you can find how the Kalman Filter can be used to infer the kinematics of a mouse behaving in a foraging arena.
 

@@ -4,7 +4,7 @@ In general, when using the LinearDynamicalSystems package, you need to configure
 
 If you followed the installation guide, you will have a basic Bonsai-python environment for using the LinearDynamicalSystems package. You will also have installed the basic dependencies required to build and run the Bonsai workflows. However, if you wish to run the examples, we highly recommend following this guide to create and configure the environments needed for each example. This guide has been made for users starting from scratch to get started. Alternatively, you can use the environment you created in the previous guide and install the necessary package dependencies required to run each workflow.
 
-All of the examples are self-contained and can be found by going to the [Bonsai.ML - Examples](https://github.com/ncguilbeault/machinelearning-examples) repo. For each example, you can bootstrap the python and Bonsai environments from within each example directory. Below, we demonstrate how to get started using the examples by bootstrapping the example environments that are needed to run the example workflow.
+All of the examples are self-contained and can be found by going to the [Bonsai.ML - Examples](https://github.com/bonsai-rx/machinelearning-examples) repo. For each example, you can bootstrap the python and Bonsai environments from within each example directory. Below, we demonstrate how to get started using the examples by bootstrapping the example environments that are needed to run the example workflow.
 
 ### Windows
 
@@ -20,10 +20,10 @@ You must have the following installed on your PC in order to run the example wor
 
 #### Instructions
 
-Open the terminal. Start by cloning the [Bonsai.ML - Examples](https://github.com/ncguilbeault/machinelearning-examples) repo with:
+Open the terminal. Start by cloning the [Bonsai.ML - Examples](https://github.com/bonsai-rx/machinelearning-examples) repo with:
 
 ```cmd
-git clone https://github.com/ncguilbeault/machinelearning-examples.git
+git clone https://github.com/bonsai-rx/machinelearning-examples.git
 ```
 
 Change directory to one of the examples. For instance, this will bring you to the simulated data example from the LinearDynamicalSystems.Kinematics package:
@@ -78,10 +78,10 @@ You must have the following installed on your PC in order to run the example wor
 
 #### Instructions
 
-Open up a terminal and start by cloning the [Bonsai.ML - Examples](https://github.com/ncguilbeault/machinelearning-examples) repo:
+Open up a terminal and start by cloning the [Bonsai.ML - Examples](https://github.com/bonsai-rx/machinelearning-examples) repo:
 
 ```cmd
-git clone https://github.com/ncguilbeault/machinelearning-examples.git
+git clone https://github.com/bonsai-rx/machinelearning-examples.git
 ```
 
 Change directory to one of the examples. For instance:
