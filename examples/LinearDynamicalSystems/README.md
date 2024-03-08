@@ -80,7 +80,7 @@ You must have the following installed on your PC in order to run the example wor
 
 
 > [!TIP]
-> For installing OpenCV, the simplest method is to follow the instructions on installing OpenCV from pre-built binaries*
+> For installing OpenCV, the simplest method is to follow the instructions on installing OpenCV from pre-built binaries
 
 #### Instructions
 
@@ -105,7 +105,7 @@ pip install lds_python@git+https://github.com/joacorapela/lds_python@4233363320e
 ```
 
 > [!TIP]
-> If you get an error that says something like `venv cannot be found`, you may need to install the python3 virtual environment package on your system. You can do so using the following:
+> If you get an error during this step, it may be because you need to install python virtual environment package on your system. You can do so using the following:
 
 ```cmd
 sudo apt install -y python3.10-venv
