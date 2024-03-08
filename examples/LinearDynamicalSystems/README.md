@@ -16,11 +16,12 @@ You must have the following installed on your PC in order to run the example wor
 - [Git](https://git-scm.com/downloads)
 - [Microsoft Visual C++ Redistributable](https://aka.ms/vs/16/release/vc_redist.x64.exe)
 
-*Note: when running windows in a virtual machine, it is necessary to install the OpenGL mesa drivers on windows to enable image visualizers and shaders [see here](https://github.com/pal1000/mesa-dist-win)*
+> [!TIP]
+> When running windows in a virtual machine, it is necessary to install the [OpenGL mesa drivers](https://github.com/pal1000/mesa-dist-win/releases/) on the windows VM. You can read more about it [here](https://github.com/pal1000/mesa-dist-win)
 
 #### Instructions
 
-Open the terminal. Start by cloning the [Bonsai.ML - Examples](https://github.com/bonsai-rx/machinelearning-examples) repo with:
+Open the terminal or powershell. Start by cloning the [Bonsai.ML - Examples](https://github.com/bonsai-rx/machinelearning-examples) repo with:
 
 ```cmd
 git clone https://github.com/bonsai-rx/machinelearning-examples.git
@@ -32,12 +33,6 @@ Change directory to one of the examples. For instance, this will bring you to th
 cd .\machinelearning-examples\examples\LinearDynamicalSystems\Kinematics\SimulatedData
 ```
 
-For the next step, you need to make sure that powershell scripts are executable from the terminal. To do this, open a powershell terminal using `Run as Administrator` and enter `yes` after the following:
-
-```powershell
-set-executionpolicy remotesigned
-```
-
 To create the python virtual environment and install the package, run the following:
 
 ```cmd
@@ -46,11 +41,18 @@ python -m venv .venv
 pip install lds_python@git+https://github.com/joacorapela/lds_python@4233363320e021f77f9b3e124846ec2e49c0e741
 ```
 
-To create the bonsai environment and install the packages, run:
+> [!TIP]
+> If you get an error during this step, you need to make sure that scripts are executable from the terminal. To do this, open a powershell terminal using `Run as Administrator` and enter this line, followed by `yes`:
+
+```powershell
+set-executionpolicy remotesigned
+```
+
+To create the bonsai environment and install the packages, run the powershell script:
 
 ```cmd
 cd .bonsai
-.\Setup.ps1
+powershell .\Setup.ps1
 ```
 
 Once installed, run the bonsai executable with:
@@ -65,7 +67,7 @@ Open the workflow example and start the bonsai workflow.
 
 #### Notes on Running Bonsai in Linux
 
-Currently, the examples have only been tested on Ubuntu 22.04. Running Bonsai on Linux is still being tested and sheould be used with caution. When running the example workflows in Linux, it is important that you follow the general [Bonsai installation guide on Linux](https://github.com/orgs/bonsai-rx/discussions/1101) to ensure that the underlying Bonsai package dependencies are available to the system.
+Currently, the examples have only been tested on Ubuntu 22.04. Running Bonsai on Linux is still being tested and should be used with caution. We cannot guarantee that these instructions will work for all Linux distributions or versions. It is important that you consult the general [Bonsai installation guide on Linux](https://github.com/orgs/bonsai-rx/discussions/1101) to ensure that the underlying Bonsai package dependencies are met and installed properly.
 
 #### Dependencies
 
@@ -74,7 +76,11 @@ You must have the following installed on your PC in order to run the example wor
 - [Python (v3.10)](https://www.python.org/downloads/) *comes installed with the latest version of Ubuntu 22.04*
 - [Git](https://git-scm.com/downloads)
 - [Mono](https://www.mono-project.com/download/stable/#download-lin)
-- [OpenCV binaries](https://github.com/orgs/bonsai-rx/discussions/1101) *the simplest method is to follow the instructions on installing OpenCV from pre-built binaries*
+- [OpenCV and OpenGL binaries](https://github.com/orgs/bonsai-rx/discussions/1101) 
+
+
+> [!TIP]
+> For installing OpenCV, the simplest method is to follow the instructions on installing OpenCV from pre-built binaries*
 
 #### Instructions
 
@@ -90,12 +96,6 @@ Change directory to one of the examples. For instance:
 cd machinelearning-examples/examples/LinearDynamicalSystems/Kinematics/SimulatedData
 ```
 
-Install the python 3.10 virtual env package:
-
-```cmd
-sudo apt install -y python3.10-venv
-```
-
 Create the python virtual environment and install the lds python package with the following:
 
 ```cmd
@@ -104,10 +104,11 @@ source .venv/bin/activate
 pip install lds_python@git+https://github.com/joacorapela/lds_python@4233363320e021f77f9b3e124846ec2e49c0e741
 ```
 
-Install the `xmllint` and the `xmlstarlet` packages to run the bonsai setup script:
+> [!TIP]
+> If you get an error that says something like `venv cannot be found`, you may need to install the python3 virtual environment package on your system. You can do so using the following:
 
 ```cmd
-sudo apt install -y libxml2-utils xmlstarlet
+sudo apt install -y python3.10-venv
 ```
 
 Run the `Setup.sh` script using the following:
@@ -117,6 +118,13 @@ cd .bonsai
 ./Setup.sh
 ```
 
+> [!TIP]
+> The `Setup.sh` script uses the `xmllint` and `xmlstarlet` packages to convert the assembly location paths in the bonsai config file from Windows to Linux paths. If you do not have these packages already installed on your computer, you can install the `xmllint` and the `xmlstarlet` packages using:
+
+```cmd
+sudo apt install -y libxml2-utils xmlstarlet
+```
+
 Once the bonsai environment has been created, activate the bonsai environment and run the Bonsai executable:
 
 ```cmd
@@ -124,10 +132,7 @@ source ./activate
 bonsai
 ```
 
-or run the Bonsai executable file directly with mono:
-
-```cmd
-mono Bonsai.exe
-```
+> [!TIP]
+> If your desktop theme is set to dark mode, the Bonsai GUI can display in weird ways due to the way that mono tries to use the desktop theme in applications. If you use the `bonsai-clean` command instead of the `bonsai` command, this will reset the theme that mono uses to the default theme, which can imporove the appearance of the Bonsai GUI.
 
 Open the workflow example and start the bonsai workflow.
