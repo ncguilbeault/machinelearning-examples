@@ -43,7 +43,7 @@ To create the python virtual environment and install the package, run the follow
 ```cmd
 python -m venv .venv 
 .\.venv\Scripts\activate
-pip install lds_python@git+https://github.com/joacorapela/lds_python@168d4c05bb4b014998c7d3a2a57d143244a44bdd
+pip install lds_python@git+https://github.com/joacorapela/lds_python@4233363320e021f77f9b3e124846ec2e49c0e741
 ```
 
 To create the bonsai environment and install the packages, run:
@@ -101,7 +101,7 @@ Create the python virtual environment and install the lds python package with th
 ```cmd
 python3 -m venv .venv 
 source .venv/bin/activate
-pip install lds_python@git+https://github.com/joacorapela/lds_python@168d4c05bb4b014998c7d3a2a57d143244a44bdd
+pip install lds_python@git+https://github.com/joacorapela/lds_python@4233363320e021f77f9b3e124846ec2e49c0e741
 ```
 
 Install the `xmllint` and the `xmlstarlet` packages to run the bonsai setup script:
