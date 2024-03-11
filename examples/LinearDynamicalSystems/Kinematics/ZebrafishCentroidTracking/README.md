@@ -21,6 +21,8 @@ If you used the bootstrapping method, you dont have to worry about the package d
 
 ### Dataset
 
+The video in this dataset was provided by Nicholas Guilbeault in the Thiele lab at the University of Toronto and published as part of Guilbeault, N.C., Guerguiev, J., Martin, M. et al. BonZeb: open-source, modular software tools for high-resolution zebrafish tracking and analysis. Sci Rep 11, 8148 (2021). [https://doi.org/10.1038/s41598-021-85896-x](https://doi.org/10.1038/s41598-021-85896-x).
+
 You can download the `ZebrafishExampleVid.avi` video file here: [https://doi.org/10.5281/zenodo.10629221](https://doi.org/10.5281/zenodo.10629221). The workflow expects the video to be placed into the `datasets` folder but if you prefer to keep the video elsewhere, simply change the `Filename` property of the `ZebrafishTracking` group node to point to the correct location.
 
 ### Workflow
