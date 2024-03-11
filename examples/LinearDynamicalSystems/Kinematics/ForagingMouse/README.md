@@ -41,4 +41,4 @@ To visualize the inferred position, velocity, and acceleration kinematics, the `
 
 The workflow should look like this:
 
-
+![Foraging Mouse](ForagingMouse.gif)
