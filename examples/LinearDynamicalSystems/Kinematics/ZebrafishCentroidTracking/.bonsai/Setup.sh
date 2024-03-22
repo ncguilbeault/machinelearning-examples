@@ -20,21 +20,6 @@ if [ ! -f "./Bonsai.exe" ]; then
     rm -rf "Bonsai32.exe"
 fi
 
-if [ -f "./Bonsai.config" ]; then
-    ASSEMBLYLOCATIONS=$(xmllint --xpath '//PackageConfiguration/AssemblyLocations/AssemblyLocation/@location' "$CONFIG" | sed -e 's/^[^"]*"//' -e 's/"$//')
-    for ASSEMBLYLOCATION in $ASSEMBLYLOCATIONS;
-    do
-        NEWASSEMBLYLOCATION="${ASSEMBLYLOCATION//\\/\/}"
-        xmlstarlet edit --inplace --update "/PackageConfiguration/AssemblyLocations/AssemblyLocation[@location='$ASSEMBLYLOCATION']/@location" --value "$NEWASSEMBLYLOCATION" "$CONFIG"
-    done
-
-    LIBRARYFOLDERS=$(xmllint --xpath '//PackageConfiguration/LibraryFolders/LibraryFolder/@path' "$CONFIG" | sed -e 's/^[^"]*"//' -e 's/"$//')
-    for LIBRARYFOLDER in $LIBRARYFOLDERS;
-    do
-        NEWLIBRARYFOLDER="${LIBRARYFOLDER//\\/\/}"
-        xmlstarlet edit --inplace --update "//PackageConfiguration/LibraryFolders/LibraryFolder[@path='$LIBRARYFOLDER']/@path" --value "$NEWLIBRARYFOLDER" "$CONFIG"
-    done
-fi
-
-mono Bonsai.exe --no-editor
+source ./activate
+source ./run --no-editor
 cd $CURRENT_DIR
