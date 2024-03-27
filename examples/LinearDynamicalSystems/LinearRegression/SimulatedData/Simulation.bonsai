@@ -253,7 +253,7 @@
       <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.LinearDynamicalSystems:LinearRegression.CreateKFModel.bonsai">
         <LikelihoodPrecisionCoef>25</LikelihoodPrecisionCoef>
         <PriorPrecisionCoef>2</PriorPrecisionCoef>
-        <N_features>2</N_features>
+        <NumFeatures>2</NumFeatures>
         <Name>model</Name>
       </Expression>
       <Expression xsi:type="rx:BehaviorSubject">
