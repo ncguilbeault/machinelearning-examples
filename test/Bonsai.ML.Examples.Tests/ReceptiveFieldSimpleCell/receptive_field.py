@@ -49,7 +49,7 @@ Sn = S0
 kf = lds.inference.TimeVaryingOnlineKalmanFilter()
 
 for n, t in enumerate(responses):
-    if n % 1000 == 1:
+    if n % 1000 == 999:
         print(f"Processing {n + 1}/({len(responses)})")
 
     # update posterior
