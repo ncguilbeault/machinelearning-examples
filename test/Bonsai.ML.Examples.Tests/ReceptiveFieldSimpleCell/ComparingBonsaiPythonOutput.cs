@@ -166,6 +166,7 @@ public class ComparingBonsaiPythonOutput
     [DeploymentItem("run_bonsai_test.ps1")]
     [DeploymentItem("receptive_field.bonsai")]
     [DeploymentItem("Bonsai.config")]
+    [DeploymentItem("NuGet.config")]
     public void TestSetup()
     {
         Directory.CreateDirectory(basePath);

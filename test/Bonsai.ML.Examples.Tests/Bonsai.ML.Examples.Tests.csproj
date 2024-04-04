@@ -37,5 +37,8 @@
     <Content Include="ReceptiveFieldSimpleCell/Bonsai.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="ReceptiveFieldSimpleCell/NuGet.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
 </ItemGroup>
 </Project>
