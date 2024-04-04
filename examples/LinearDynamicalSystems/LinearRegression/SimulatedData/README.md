@@ -1,6 +1,6 @@
 # Simulated Data
 
-The code for this repo can be found [here](https://github.com/bonsai-rx/machinelearning-examples/tree/main/examples/LinearDynamicalSystems/BayesianLinearRegression/SimulatedData).
+The code for this repo can be found [here](https://github.com/bonsai-rx/machinelearning-examples/tree/main/examples/LinearDynamicalSystems/LinearRegression/SimulatedData).
 
 In the following example, you will see how the Kalman Filter can be used to perform Bayesian linear regression to estimate the parameters of a simple linear model with some added gaussian noise.
 

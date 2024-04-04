@@ -1,6 +1,6 @@
 # Receptive Field Simple Cell
 
-The code for this repo can be found [here](https://github.com/bonsai-rx/machinelearning-examples/tree/main/examples/LinearDynamicalSystems/BayesianLinearRegression/ReceptiveFieldSimpleCell).
+The code for this repo can be found [here](https://github.com/bonsai-rx/machinelearning-examples/tree/main/examples/LinearDynamicalSystems/LinearRegression/ReceptiveFieldSimpleCell).
 
 In the following example, you can find how the Kalman Filter can be used to estimate the linear receptive field of a simple cell recorded from V1 of an anaesthetised cat.
 
