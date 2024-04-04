@@ -4,6 +4,7 @@ import os
 import argparse
 
 def get_base_dir(base_dir = None):
+    # function to get the base directory
     if base_dir is not None:
         return base_dir
     try:
@@ -12,6 +13,7 @@ def get_base_dir(base_dir = None):
         return os.getcwd()
 
 def create_venv(parent_dir = None):
+    # function to create a virtual environment
     if parent_dir is None:
         parent_dir = os.path.dirname(os.path.realpath(__file__))
     venv_path = os.path.join(parent_dir, ".venv")
@@ -19,12 +21,12 @@ def create_venv(parent_dir = None):
     return venv_path
 
 def activate_venv(venv_path = None):
+    # function to activate the virtual environment
     if venv_path is None:
         venv_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), '.venv')
     if sys.platform.startswith('linux'):
         bin_path = os.path.join(venv_path, 'bin')
         os.environ["PATH"] = os.pathsep.join([bin_path, *os.environ.get("PATH", "").split(os.pathsep)])
-        # os.environ['VIRTUAL_ENV'] = venv_path
         sys.path.insert(0, os.path.join(venv_path, 'lib', f'python{sys.version_info.major}.{sys.version_info.minor}', 'site-packages'))
     else:
         bin_path = os.path.join(venv_path, 'Scripts')
@@ -32,6 +34,7 @@ def activate_venv(venv_path = None):
         sys.path.insert(0, os.path.join(venv_path, 'Lib', 'site-packages'))
 
 def install(package, venv_path = None):
+    # function to install pip packages into a virtual environment
     if venv_path is None:
         venv_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), '.venv')
     if sys.platform.startswith('linux'):

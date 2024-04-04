@@ -16,6 +16,40 @@ public class ComparingBonsaiPythonOutput
     private string basePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ReceptiveFieldSimpleCell");
     private int nSamples = 10000;
 
+    private void RunProcess(string fileName, string fmtArg)
+    {
+        var start = new ProcessStartInfo
+        {
+            FileName = fileName,
+            Arguments = fmtArg,
+            RedirectStandardOutput = true,
+            RedirectStandardInput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+            CreateNoWindow = true,
+        };
+
+        using (var process = new Process {StartInfo = start})
+        {
+            process.Start();
+            var output = process.StandardOutput.ReadToEnd();
+            var error = process.StandardError.ReadToEnd();
+            process.WaitForExit();
+
+            if (!string.IsNullOrEmpty(output))
+            {
+                Console.WriteLine("Standard Output: ");
+                Console.WriteLine(output);
+            }
+
+            if (!string.IsNullOrEmpty(error))
+            {
+                Console.WriteLine("Standard Error: ");
+                Console.WriteLine(error);
+            }
+        }
+    }
+
     private void DownloadData(string basePath)
     {
         string zipFileUrl = "https://zenodo.org/records/10879253/files/ReceptiveFieldSimpleCell.zip";
@@ -55,24 +89,8 @@ public class ComparingBonsaiPythonOutput
         var pythonExec = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
             ? "python"
             : "python3";
-        var start = new ProcessStartInfo
-        {
-            FileName = pythonExec,
-            Arguments = $"\"{basePath}/run_python_test.py\" {basePath} {nSamples}",
-            RedirectStandardOutput = true,
-            RedirectStandardInput = true,
-            RedirectStandardError = true,
-            UseShellExecute = false,
-            CreateNoWindow = true,
-        };
-        
-        using (var process = Process.Start(start))
-        {
-            using (var reader = process.StandardOutput)
-            {
-                reader.ReadToEnd();
-            }
-        }
+
+        RunProcess(pythonExec, $"\"{basePath}/run_python_test.py\" {basePath} {nSamples}");
 
         Console.WriteLine("Run python script finished.");
     }
@@ -81,46 +99,12 @@ public class ComparingBonsaiPythonOutput
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            var start = new ProcessStartInfo
-            {
-                FileName = Path.Combine(basePath, ".bonsai", "Bonsai.exe"),
-                Arguments = "receptive_field.bonsai --no-editor --start --property ImagesCsv=\"ReceptiveFieldSimpleCell/images.csv\" --property ResponsesCsv=\"ReceptiveFieldSimpleCell/responses.csv\" --property PythonHome=\".venv\"",
-                RedirectStandardOutput = true,
-                RedirectStandardInput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-            };
-
-            using (var process = Process.Start(start))
-            {
-                using (var reader = process.StandardOutput)
-                {
-                    reader.ReadToEnd();
-                }
-            }
+            RunProcess("powershell", $"\"{basePath}\\run_bonsai_test.ps1\" {basePath} {nSamples}");
         }
 
         else
         {
-            var start = new ProcessStartInfo
-            {
-                FileName = "/bin/bash",
-                Arguments = $"\"{basePath}/run_bonsai_test.sh\" {basePath} {nSamples}",
-                RedirectStandardOutput = true,
-                RedirectStandardInput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-            };
-
-            using (var process = Process.Start(start))
-            {
-                using (var reader = process.StandardOutput)
-                {
-                    reader.ReadToEnd();
-                }
-            }
+            RunProcess("/bin/bash", $"\"{basePath}/run_bonsai_test.sh\" {basePath} {nSamples}");
         }
         
         Console.WriteLine("Run bonsai workflow finished.");
@@ -145,11 +129,6 @@ public class ComparingBonsaiPythonOutput
     {
         var bonsaiFileName = Path.Combine(basePath, "bonsai-receptivefield.json");
         var pythonFileName = Path.Combine(basePath, "python-receptivefield.json");
-
-        // var bonsaiOutput = GetJsonData(bonsaiFileName);
-        // var pythonOutput = GetJsonData(pythonFileName);
-
-        // return (!string.IsNullOrEmpty(bonsaiOutput)) && (bonsaiOutput == pythonOutput);
 
         var bonsaiOutput = GetStateFromJson(bonsaiFileName);
         var pythonOutput = GetStateFromJson(pythonFileName);
@@ -184,6 +163,7 @@ public class ComparingBonsaiPythonOutput
     [DeploymentItem("run_python_test.py")]
     [DeploymentItem("receptive_field.py")]
     [DeploymentItem("run_bonsai_test.sh")]
+    [DeploymentItem("run_bonsai_test.ps1")]
     [DeploymentItem("receptive_field.bonsai")]
     [DeploymentItem("Bonsai.config")]
     public void TestSetup()

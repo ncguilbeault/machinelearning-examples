@@ -28,6 +28,9 @@
     <Content Include="ReceptiveFieldSimpleCell/run_bonsai_test.sh">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="ReceptiveFieldSimpleCell/run_bonsai_test.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="ReceptiveFieldSimpleCell/receptive_field.bonsai">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
