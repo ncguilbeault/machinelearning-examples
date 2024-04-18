@@ -37,4 +37,4 @@ You can find specific information about the tracking workflow and model inferenc
 
 The easiest way to observe the effects that optimizing the models parameters has on the models output is to compare the outputs between a model that undergoes optimization and an identical model that retains its initial parameters. With each iteration, the optimized model will diverge from the unoptimized model and more closely track the position of the mouse. This is what you would see:
 
-![Comparing Optimized Model with Unoptimized Model](ComparingModelOptimization.gif)
+![Comparing Optimized Model with Unoptimized Model](ComparingModelOutputs.gif)
