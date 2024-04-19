@@ -52,7 +52,7 @@ base_dir = get_base_dir(args.base_dir)
 venv_path = create_venv(base_dir)
 activate_venv(venv_path)
 install("pandas", venv_path)
-install("lds_python@git+https://github.com/joacorapela/lds_python@4233363320e021f77f9b3e124846ec2e49c0e741", venv_path)
+install("lds_python@git+https://github.com/ncguibeault/lds_python@dc7a2e02892033734746bc0615dc294f5b43f672", venv_path)
 
 if sys.platform.startswith('linux'):
     python_path = os.path.join(venv_path, "bin", "python")
