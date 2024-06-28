@@ -12,6 +12,8 @@
   href: ../examples/LinearDynamicalSystems/Kinematics/ForagingMouse/README.md
 - name: Optimizing Model Parameters for Foraging Mouse
   href: ../examples/LinearDynamicalSystems/Kinematics/ModelOptimizationForagingMouse/README.md
+- name: Forecasting Foraging Mouse Kinematics
+  href: ../examples/LinearDynamicalSystems/Kinematics/ForecastingForagingMouse/README.md
 - name: Linear Regression
 - name: Simulated Data
   href: ../examples/LinearDynamicalSystems/LinearRegression/SimulatedData/README.md
