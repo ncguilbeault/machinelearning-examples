@@ -9,8 +9,8 @@ In the following example, you can find how the Kalman Filter can be used to esti
 If you used the bootstrapping method, you dont have to worry about the package dependencies, as these should be already installed. However, if creating a new environment or integrating into an existing one, you will need to install the following packages:
 
 * Bonsai - System v2.8.1
-* Bonsai - ML LinearDynamicalSystems v0.1.0
-* Bonsai - ML Visualizers v0.1.0
+* Bonsai - ML LinearDynamicalSystems v0.2.0
+* Bonsai - ML Visualizers v0.2.0
 
 ### Dataset
 
@@ -28,7 +28,7 @@ Below is the example workflow for how to perform online estimation of the recept
 
 In this example, a Kalman Filter is used to estimate the receptive field using Bayesian inference. It receives the pixel values, represented by a flattened array of the 2D visual stimulus, and infers the response of the neuron. In the `images.csv` file, there are 144 columns. These columns represent the pixel values of the stimulus that was displayed (a 12 x 12 image for a total of 144 pixels). The neuron's binned spike count is recorded in response to each image. These responses are recorded in the `responses.csv` file. In the `LoadData` group node, we read in the values from each csv file and zip them together. We add an additional feature to the image observations to represent our model's intercept. This is done when we convert the images csv data to a list in the `Format` node inside the `LoadData` group node. Since we are loading all of our data at once, we store the data inside of a `ReplaySubject` which will represent our `observation` of data.
 
-In the `CreateKFModel` node, we specify the number of features that will be used observed at each time step. This number is set to the total number of pixels in our image (144 total) plus an additional feature that is used to represent the model intercept. We then specify the coefficients for our precision of the likelihood and the prior. 
+In the `CreateKFModel` node, we specify the number of features that will be used observed at each time step. This number is set to the total number of pixels in our image (144 total) plus an additional feature that is used to represent the model intercept. We then specify the coefficients for our precision of the likelihood and the prior.
 
 We wait for the model to initialize and then subscribe to the data observations using the `SubscribeWhen` node. As the workflow runs, the model will perform bayesian inference to learn the visual features that the neuron responds strongly too. The neurons receptive field can then be visualized as the models state parameters evolving through time.
 
