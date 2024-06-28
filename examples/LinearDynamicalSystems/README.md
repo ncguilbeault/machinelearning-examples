@@ -38,7 +38,7 @@ To create the python virtual environment and install the package, run the follow
 ```cmd
 python -m venv .venv 
 .\.venv\Scripts\activate
-pip install lds_python@git+https://github.com/joacorapela/lds_python@4233363320e021f77f9b3e124846ec2e49c0e741
+pip install lds_python@git+https://github.com/joacorapela/lds_python@f761c201f3df883503ecb67acef35ba846e3524c
 ```
 
 > [!TIP]
@@ -101,7 +101,7 @@ Create the python virtual environment and install the lds python package with th
 ```cmd
 python3 -m venv .venv 
 source .venv/bin/activate
-pip install lds_python@git+https://github.com/joacorapela/lds_python@4233363320e021f77f9b3e124846ec2e49c0e741
+pip install lds_python@git+https://github.com/joacorapela/lds_python@f761c201f3df883503ecb67acef35ba846e3524c
 ```
 
 > [!TIP]
