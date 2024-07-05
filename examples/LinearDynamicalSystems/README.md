@@ -1,6 +1,6 @@
 # Getting Started
 
-In general, when using the LinearDynamicalSystems package, you need to configure your Bonsai workflow to run the correct python environment which has the [lds_python](https://github.com/joacorapela/lds_python) package was installed.
+In general, when using the LinearDynamicalSystems package, you need to configure your Bonsai workflow to run the correct python environment which has the [lds_python](https://github.com/joacorapela/lds_python) package installed.
 
 If you followed the installation guide, you will have a basic Bonsai-python environment for using the LinearDynamicalSystems package. You will also have installed the basic dependencies required to build and run the Bonsai workflows. However, if you wish to run the examples, we highly recommend following this guide to create and configure the environments needed for each example. This guide has been made for users starting from scratch to get started. Alternatively, you can use the environment you created in the previous guide and install the necessary package dependencies required to run each workflow.
 
