@@ -11,9 +11,9 @@ If you used the environment bootstrapping method, you dont have to worry about t
 * Bonsai - Core v2.8.1
 * Bonsai - Design v2.8.0
 * Bonsai - Editor v2.8.0
-* Bonsai - ML v0.1.0
-* Bonsai - ML LinearDynamicalSystems v0.1.0
-* Bonsai - ML Visualizers v0.1.0
+* Bonsai - ML v0.2.0
+* Bonsai - ML LinearDynamicalSystems v0.2.0
+* Bonsai - ML Visualizers v0.2.0
 * Bonsai - Scripting v2.8.0
 * Bonsai - Scripting Python v0.2.0
 * Bonsai - Vision v2.8.1
