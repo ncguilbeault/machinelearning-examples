@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<WorkflowBuilder Version="2.8.1"
+<WorkflowBuilder Version="2.8.5"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
@@ -367,10 +367,10 @@
         <Vel_y0>0</Vel_y0>
         <Acc_x0>0</Acc_x0>
         <Acc_y0>0</Acc_y0>
-        <Sigma_a>10000</Sigma_a>
-        <Sigma_x>100</Sigma_x>
-        <Sigma_y>100</Sigma_y>
-        <Sqrt_diag_V0_value>0.001</Sqrt_diag_V0_value>
+        <Sigma_a>13293</Sigma_a>
+        <Sigma_x>17</Sigma_x>
+        <Sigma_y>17</Sigma_y>
+        <Sqrt_diag_V0_value>0.00093385538054207261</Sqrt_diag_V0_value>
       </Expression>
       <Expression xsi:type="rx:BehaviorSubject">
         <Name>ModelParameters</Name>
@@ -505,8 +505,8 @@
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="drw:Circle">
                       <drw:Center>
-                        <drw:X>663</drw:X>
-                        <drw:Y>311</drw:Y>
+                        <drw:X>330</drw:X>
+                        <drw:Y>144</drw:Y>
                       </drw:Center>
                       <drw:Radius>5</drw:Radius>
                       <drw:Color>
@@ -607,8 +607,8 @@ def process(value):
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="drw:Circle">
                       <drw:Center>
-                        <drw:X>666</drw:X>
-                        <drw:Y>314</drw:Y>
+                        <drw:X>334</drw:X>
+                        <drw:Y>147</drw:Y>
                       </drw:Center>
                       <drw:Radius>5</drw:Radius>
                       <drw:Color>
