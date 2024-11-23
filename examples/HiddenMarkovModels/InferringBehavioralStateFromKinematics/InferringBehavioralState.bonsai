@@ -328,8 +328,8 @@
       <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.LinearDynamicalSystems:Kinematics.CreateKFModel.bonsai">
         <Name>KFmodel</Name>
         <Fps>60</Fps>
-        <Pos_x0>668.08917236328125</Pos_x0>
-        <Pos_y0>408.89923095703125</Pos_y0>
+        <Pos_x0>675.37530517578125</Pos_x0>
+        <Pos_y0>384.825927734375</Pos_y0>
         <Vel_x0>0</Vel_x0>
         <Vel_y0>0</Vel_y0>
         <Acc_x0>0</Acc_x0>
@@ -504,8 +504,8 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="cv:CreatePoint2f">
-                      <cv:X>682.937134</cv:X>
-                      <cv:Y>341.0978</cv:Y>
+                      <cv:X>288.138367</cv:X>
+                      <cv:Y>140.747131</cv:Y>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="VisualizerMapping" />
