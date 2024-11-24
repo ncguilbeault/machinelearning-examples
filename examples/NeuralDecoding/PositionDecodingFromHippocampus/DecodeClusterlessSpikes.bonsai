@@ -15,10 +15,10 @@
       <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.NeuralDecoder:ImportDecoderModule.bonsai" />
       <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.NeuralDecoder:LoadClusterlessSpikeDecoder.bonsai">
         <Name>decoder</Name>
-        <DecoderPath>../../../datasets/decoder_data/clusterless_spike_decoder.pkl</DecoderPath>
+        <DecoderPath>../../../datasets/HippocampalTetrodeRecordings/decoder_data/clusterless_spike_decoder.pkl</DecoderPath>
       </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.NeuralDecoder:LoadDecodedResultsFromFile.bonsai">
-        <ResultsPath>../../../datasets/decoder_data/clusterless_spike_decoding_results.pkl</ResultsPath>
+        <ResultsPath>../../../datasets/HippocampalTetrodeRecordings/decoder_data/clusterless_spike_decoding_results.pkl</ResultsPath>
         <SamplingFrequency>PT0.1S</SamplingFrequency>
       </Expression>
       <Expression xsi:type="rx:BehaviorSubject">
@@ -30,7 +30,7 @@
       <Expression xsi:type="MemberSelector">
         <Selector>Spikes</Selector>
       </Expression>
-      <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.NeuralDecoder:RunDecoder.bonsai">
+      <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.NeuralDecoder:PerformInference.bonsai">
         <Name>decoder</Name>
       </Expression>
       <Expression xsi:type="rx:BehaviorSubject">

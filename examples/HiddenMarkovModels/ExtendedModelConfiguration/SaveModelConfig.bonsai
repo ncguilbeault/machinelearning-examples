@@ -13,16 +13,10 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="py:CreateRuntime" />
       </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="py:GetRuntime" />
-      </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.HiddenMarkovModels:LoadHMMModule.bonsai" />
       <Expression xsi:type="Combinator">
-        <Combinator xsi:type="py:GetRuntime" />
-      </Expression>
-      <Expression xsi:type="Combinator">
         <Combinator xsi:type="p1:AutoRegressiveObservations">
-          <p1:Lags>1</p1:Lags>
+          <p1:Lags>5</p1:Lags>
         </Combinator>
       </Expression>
       <Expression xsi:type="PropertyMapping">
@@ -32,7 +26,7 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="p2:ConstrainedStationaryTransitions">
-          <p2:TransitionMask>[[1, 1], [1, 1]]</p2:TransitionMask>
+          <p2:TransitionMask>[[1, 1, 1], [1, 1, 1], [1, 0, 1]]</p2:TransitionMask>
         </Combinator>
       </Expression>
       <Expression xsi:type="PropertyMapping">
@@ -40,51 +34,26 @@
           <Property Name="Transitions" />
         </PropertyMappings>
       </Expression>
-      <Expression xsi:type="GroupWorkflow">
-        <Name>ConfigureHMM</Name>
-        <Workflow>
-          <Nodes>
-            <Expression xsi:type="WorkflowInput">
-              <Name>Source1</Name>
-            </Expression>
-            <Expression xsi:type="ExternalizedMapping">
-              <Property Name="Observations" />
-              <Property Name="Transitions" />
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p3:StateParameters" />
-            </Expression>
-            <Expression xsi:type="PropertyMapping">
-              <PropertyMappings>
-                <Property Name="StateParameters" />
-              </PropertyMappings>
-            </Expression>
-            <Expression xsi:type="ExternalizedMapping">
-              <Property Name="Name" />
-              <Property Name="NumStates" />
-              <Property Name="Dimensions" />
-            </Expression>
-            <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.HiddenMarkovModels:CreateHMM.bonsai">
-              <Name>hmm</Name>
-              <NumStates>2</NumStates>
-              <Dimensions>2</Dimensions>
-              <ObservationsModelType>Gaussian</ObservationsModelType>
-              <TransitionsModelType>ConstrainedStationary</TransitionsModelType>
-            </Expression>
-            <Expression xsi:type="WorkflowOutput" />
-          </Nodes>
-          <Edges>
-            <Edge From="0" To="5" Label="Source1" />
-            <Edge From="1" To="2" Label="Source1" />
-            <Edge From="2" To="3" Label="Source1" />
-            <Edge From="3" To="5" Label="Source2" />
-            <Edge From="4" To="5" Label="Source3" />
-            <Edge From="5" To="6" Label="Source1" />
-          </Edges>
-        </Workflow>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p3:StateParameters" />
+      </Expression>
+      <Expression xsi:type="PropertyMapping">
+        <PropertyMappings>
+          <Property Name="StateParameters" />
+        </PropertyMappings>
+      </Expression>
+      <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.HiddenMarkovModels:CreateHMM.bonsai">
+        <Name>hmm</Name>
+        <NumStates>3</NumStates>
+        <Dimensions>2</Dimensions>
+        <ObservationsModelType>AutoRegressive</ObservationsModelType>
+        <TransitionsModelType>ConstrainedStationary</TransitionsModelType>
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="p3:SerializeToJson" />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="io:WriteLine" />
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="io:WriteAllText">
@@ -101,16 +70,18 @@
       <Expression xsi:type="WorkflowOutput" />
     </Nodes>
     <Edges>
-      <Edge From="1" To="2" Label="Source1" />
-      <Edge From="3" To="8" Label="Source1" />
+      <Edge From="0" To="1" Label="Source1" />
+      <Edge From="2" To="3" Label="Source1" />
+      <Edge From="3" To="6" Label="Source1" />
       <Edge From="4" To="5" Label="Source1" />
-      <Edge From="5" To="8" Label="Source2" />
+      <Edge From="5" To="6" Label="Source2" />
       <Edge From="6" To="7" Label="Source1" />
-      <Edge From="7" To="8" Label="Source3" />
+      <Edge From="7" To="8" Label="Source1" />
       <Edge From="8" To="9" Label="Source1" />
       <Edge From="9" To="10" Label="Source1" />
       <Edge From="10" To="11" Label="Source1" />
       <Edge From="11" To="12" Label="Source1" />
+      <Edge From="12" To="13" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>
