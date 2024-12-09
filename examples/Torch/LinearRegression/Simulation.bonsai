@@ -367,26 +367,88 @@
         <Name>Coefficients</Name>
       </Expression>
       <Expression xsi:type="SubscribeSubject">
-        <Name>XYData</Name>
-      </Expression>
-      <Expression xsi:type="SubscribeSubject">
         <Name>Coefficients</Name>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="DoubleProperty">
+          <Value>-1</Value>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="DoubleProperty">
+          <Value>1</Value>
+        </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:Zip" />
       </Expression>
-      <Expression xsi:type="scr:ExpressionTransform">
-        <scr:Expression>new (it.Item1[1] as X, it.Item1[1] * it.Item2.B1 + it.Item2.B0 as Y)</scr:Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:WithLatestFrom" />
+      </Expression>
+      <Expression xsi:type="rx:SelectMany">
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="WorkflowInput">
+              <Name>Source1</Name>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Item2</Selector>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Item1</Selector>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Item2</Selector>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Merge" />
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Item1</Selector>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:WithLatestFrom" />
+            </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>it.Item1 * it.Item2.B1 + it.Item2.B0</scr:Expression>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:WithLatestFrom" />
+            </Expression>
+            <Expression xsi:type="scr:ExpressionTransform">
+              <scr:Expression>new(it.Item1 as X, it.Item2 as Y)</scr:Expression>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="0" To="5" Label="Source1" />
+            <Edge From="1" To="2" Label="Source1" />
+            <Edge From="1" To="3" Label="Source1" />
+            <Edge From="2" To="4" Label="Source1" />
+            <Edge From="3" To="4" Label="Source2" />
+            <Edge From="4" To="6" Label="Source1" />
+            <Edge From="4" To="8" Label="Source1" />
+            <Edge From="5" To="6" Label="Source2" />
+            <Edge From="6" To="7" Label="Source1" />
+            <Edge From="7" To="8" Label="Source2" />
+            <Edge From="8" To="9" Label="Source1" />
+            <Edge From="9" To="10" Label="Source1" />
+          </Edges>
+        </Workflow>
       </Expression>
       <Expression xsi:type="zg:LineGraphBuilder">
-        <zg:SymbolType>Diamond</zg:SymbolType>
-        <zg:LineWidth>0</zg:LineWidth>
+        <zg:IndexSelector />
+        <zg:ValueSelector />
+        <zg:SymbolType>None</zg:SymbolType>
+        <zg:LineWidth>2</zg:LineWidth>
         <zg:CurveSettings>
           <zg:CurveConfiguration>
+            <zg:Label>Regression</zg:Label>
             <zg:Color>Red</zg:Color>
           </zg:CurveConfiguration>
         </zg:CurveSettings>
-        <zg:Capacity xsi:nil="true" />
+        <zg:Capacity>2</zg:Capacity>
         <zg:XMin xsi:nil="true" />
         <zg:XMax xsi:nil="true" />
         <zg:YMin xsi:nil="true" />
@@ -404,6 +466,7 @@
         <zg:LineWidth>0</zg:LineWidth>
         <zg:CurveSettings>
           <zg:CurveConfiguration>
+            <zg:Label>Data</zg:Label>
             <zg:Color>Blue</zg:Color>
           </zg:CurveConfiguration>
         </zg:CurveSettings>
@@ -413,7 +476,9 @@
         <zg:YMin xsi:nil="true" />
         <zg:YMax xsi:nil="true" />
       </Expression>
-      <Expression xsi:type="VisualizerMapping" />
+      <Expression xsi:type="VisualizerMapping">
+        <VisualizerType xsi:type="TypeMapping" TypeArguments="zg:LineGraphVisualizer" />
+      </Expression>
       <Expression xsi:type="zg:GraphPanelBuilder">
         <zg:ReverseX>false</zg:ReverseX>
         <zg:ReverseY>false</zg:ReverseY>
@@ -456,16 +521,18 @@
       <Edge From="32" To="33" Label="Source1" />
       <Edge From="33" To="34" Label="Source1" />
       <Edge From="34" To="35" Label="Source1" />
-      <Edge From="36" To="38" Label="Source1" />
-      <Edge From="37" To="38" Label="Source2" />
-      <Edge From="38" To="39" Label="Source1" />
-      <Edge From="39" To="40" Label="Source1" />
+      <Edge From="36" To="40" Label="Source1" />
+      <Edge From="37" To="39" Label="Source1" />
+      <Edge From="38" To="39" Label="Source2" />
+      <Edge From="39" To="40" Label="Source2" />
       <Edge From="40" To="41" Label="Source1" />
-      <Edge From="41" To="46" Label="Source1" />
+      <Edge From="41" To="42" Label="Source1" />
       <Edge From="42" To="43" Label="Source1" />
-      <Edge From="43" To="44" Label="Source1" />
+      <Edge From="43" To="48" Label="Source1" />
       <Edge From="44" To="45" Label="Source1" />
-      <Edge From="45" To="46" Label="Source2" />
+      <Edge From="45" To="46" Label="Source1" />
+      <Edge From="46" To="47" Label="Source1" />
+      <Edge From="47" To="48" Label="Source2" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>
