@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WorkflowBuilder Version="2.8.5"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:py="clr-namespace:Bonsai.Scripting.Python;assembly=Bonsai.Scripting.Python"
+                 xmlns:p1="clr-namespace:;assembly=Extensions"
+                 xmlns="https://bonsai-rx.org/2018/workflow">
+  <Workflow>
+    <Nodes>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="py:CreateRuntime" />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p1:CreateNdArray" />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="py:ObserveOnGIL" />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="py:Set">
+          <py:VariableName>my_var</py:VariableName>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="py:Eval">
+          <py:Expression>print(type(my_var))</py:Expression>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="py:Eval">
+          <py:Expression>print(my_var[0])</py:Expression>
+        </Combinator>
+      </Expression>
+    </Nodes>
+    <Edges>
+      <Edge From="1" To="2" Label="Source1" />
+      <Edge From="2" To="3" Label="Source1" />
+      <Edge From="3" To="4" Label="Source1" />
+      <Edge From="4" To="5" Label="Source1" />
+    </Edges>
+  </Workflow>
+</WorkflowBuilder>

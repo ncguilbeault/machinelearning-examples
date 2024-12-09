@@ -1,0 +1,817 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WorkflowBuilder Version="2.8.5"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
+                 xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
+                 xmlns:p1="clr-namespace:Bonsai.ML.Torch;assembly=Bonsai.ML.Torch"
+                 xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
+                 xmlns:p2="clr-namespace:Bonsai.ML.Torch.NeuralNets;assembly=Bonsai.ML.Torch"
+                 xmlns:p3="clr-namespace:;assembly=Extensions"
+                 xmlns:gl="clr-namespace:Bonsai.Shaders;assembly=Bonsai.Shaders"
+                 xmlns:res="clr-namespace:Bonsai.Resources;assembly=Bonsai.System"
+                 xmlns="https://bonsai-rx.org/2018/workflow">
+  <Workflow>
+    <Nodes>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="cv:CameraCapture">
+          <cv:Index>0</cv:Index>
+          <cv:CaptureProperties />
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="cv:Flip">
+          <cv:Mode>Vertical</cv:Mode>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="cv:Resize">
+          <cv:Size>
+            <cv:Width>640</cv:Width>
+            <cv:Height>640</cv:Height>
+          </cv:Size>
+          <cv:Interpolation>Linear</cv:Interpolation>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="rx:PublishSubject">
+        <Name>Image</Name>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p1:InitializeTorchDevice">
+          <p1:DeviceType>CUDA</p1:DeviceType>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="rx:BehaviorSubject">
+        <Name>CUDA</Name>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p1:InitializeTorchDevice">
+          <p1:DeviceType>CPU</p1:DeviceType>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="rx:BehaviorSubject">
+        <Name>CPU</Name>
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>Image</Name>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p1:ToTensor" />
+      </Expression>
+      <Expression xsi:type="rx:BehaviorSubject">
+        <Name>ImageTensor</Name>
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>ImageTensor</Name>
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>CUDA</Name>
+      </Expression>
+      <Expression xsi:type="PropertyMapping">
+        <PropertyMappings>
+          <Property Name="Device" />
+        </PropertyMappings>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p1:ToDevice" />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p1:ConvertDataType">
+          <p1:Type>Float32</p1:Type>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="scr:ExpressionTransform">
+        <scr:Expression>it.T.unsqueeze(0)</scr:Expression>
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>CUDA</Name>
+      </Expression>
+      <Expression xsi:type="PropertyMapping">
+        <PropertyMappings>
+          <Property Name="Device" />
+        </PropertyMappings>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p2:LoadScriptModule">
+          <p2:ModelPath>models\yolov5s.pt</p2:ModelPath>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="PropertyMapping">
+        <PropertyMappings>
+          <Property Name="Model" />
+        </PropertyMappings>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p2:Forward" />
+      </Expression>
+      <Expression xsi:type="rx:BehaviorSubject">
+        <Name>YoloV5sOutput</Name>
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>YoloV5sOutput</Name>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p3:CreateBoundingBoxes">
+          <p3:ConfidenceThreshold>0.999</p3:ConfidenceThreshold>
+          <p3:IoUThreshold>0.9</p3:IoUThreshold>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="rx:BehaviorSubject">
+        <Name>Boxes</Name>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>YoloV5sOutput</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="GroupWorkflow">
+          <Name>GetBoundingBoxes</Name>
+          <Workflow>
+            <Nodes>
+              <Expression xsi:type="WorkflowInput">
+                <Name>Source1</Name>
+              </Expression>
+              <Expression xsi:type="Combinator">
+                <Combinator xsi:type="p1:Index">
+                  <p1:Indexes>0,:,:4</p1:Indexes>
+                </Combinator>
+              </Expression>
+              <Expression xsi:type="WorkflowOutput" />
+            </Nodes>
+            <Edges>
+              <Edge From="0" To="1" Label="Source1" />
+              <Edge From="1" To="2" Label="Source1" />
+            </Edges>
+          </Workflow>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="rx:BehaviorSubject">
+          <Name>BoundingBoxes</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>YoloV5sOutput</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="GroupWorkflow">
+          <Name>GetConfidenceScores</Name>
+          <Workflow>
+            <Nodes>
+              <Expression xsi:type="WorkflowInput">
+                <Name>Source1</Name>
+              </Expression>
+              <Expression xsi:type="Combinator">
+                <Combinator xsi:type="p1:Index">
+                  <p1:Indexes>0,:,4</p1:Indexes>
+                </Combinator>
+              </Expression>
+              <Expression xsi:type="WorkflowOutput" />
+            </Nodes>
+            <Edges>
+              <Edge From="0" To="1" Label="Source1" />
+              <Edge From="1" To="2" Label="Source1" />
+            </Edges>
+          </Workflow>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="rx:BehaviorSubject">
+          <Name>ConfidenceScores</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>YoloV5sOutput</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="GroupWorkflow">
+          <Name>GetClassScores</Name>
+          <Workflow>
+            <Nodes>
+              <Expression xsi:type="WorkflowInput">
+                <Name>Source1</Name>
+              </Expression>
+              <Expression xsi:type="Combinator">
+                <Combinator xsi:type="p1:Index">
+                  <p1:Indexes>0,:,5:</p1:Indexes>
+                </Combinator>
+              </Expression>
+              <Expression xsi:type="WorkflowOutput" />
+            </Nodes>
+            <Edges>
+              <Edge From="0" To="1" Label="Source1" />
+              <Edge From="1" To="2" Label="Source1" />
+            </Edges>
+          </Workflow>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="rx:BehaviorSubject">
+          <Name>ClassScores</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>FilteredBoundingBoxes</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>FilteredScores</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="rx:Zip" />
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="p3:Nms">
+            <p3:IoU>0.99</p3:IoU>
+          </Combinator>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>ConfidenceScores</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>CUDA</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="InputMapping">
+          <PropertyMappings>
+            <Property Name="Device" />
+          </PropertyMappings>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="p1:CreateTensor">
+          <p1:Type>Float32</p1:Type>
+          <p1:Values>[0.9999]</p1:Values>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="rx:WithLatestFrom" />
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="GreaterThan" />
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="InputMapping">
+          <PropertyMappings>
+            <Property Name="Tensor" Selector="it" />
+          </PropertyMappings>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="p1:IndexWithTensor" />
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="rx:BehaviorSubject">
+          <Name>Mask</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>BoundingBoxes</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>Mask</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="rx:SelectMany">
+          <Workflow>
+            <Nodes>
+              <Expression xsi:type="WorkflowInput">
+                <Name>Source1</Name>
+              </Expression>
+              <Expression xsi:type="Combinator">
+                <Combinator xsi:type="rx:Take">
+                  <rx:Count>1</rx:Count>
+                </Combinator>
+              </Expression>
+              <Expression xsi:type="Combinator">
+                <Combinator xsi:type="rx:ToArray" />
+              </Expression>
+              <Expression xsi:type="WorkflowOutput" />
+            </Nodes>
+            <Edges>
+              <Edge From="0" To="1" Label="Source1" />
+              <Edge From="1" To="2" Label="Source1" />
+              <Edge From="2" To="3" Label="Source1" />
+            </Edges>
+          </Workflow>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="rx:Zip" />
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Index" />
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>CUDA</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="InputMapping">
+          <PropertyMappings>
+            <Property Name="Device" />
+          </PropertyMappings>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="p1:CreateTensor">
+          <p1:Type>Float32</p1:Type>
+          <p1:Values>[640, 640, 640, 640]</p1:Values>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="p1:Reshape">
+            <p1:Dimensions>
+              <p1:long>1</p1:long>
+              <p1:long>4</p1:long>
+            </p1:Dimensions>
+          </Combinator>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="rx:WithLatestFrom" />
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Divide" />
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="rx:BehaviorSubject">
+          <Name>FilteredBoundingBoxes</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>ClassScores</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>ConfidenceScores</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="scr:ExpressionTransform">
+          <scr:Expression>it.unsqueeze(1)</scr:Expression>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="rx:Zip" />
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Multiply" />
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>Mask</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="rx:SelectMany">
+          <Workflow>
+            <Nodes>
+              <Expression xsi:type="WorkflowInput">
+                <Name>Source1</Name>
+              </Expression>
+              <Expression xsi:type="Combinator">
+                <Combinator xsi:type="rx:Take">
+                  <rx:Count>1</rx:Count>
+                </Combinator>
+              </Expression>
+              <Expression xsi:type="Combinator">
+                <Combinator xsi:type="rx:ToArray" />
+              </Expression>
+              <Expression xsi:type="WorkflowOutput" />
+            </Nodes>
+            <Edges>
+              <Edge From="0" To="1" Label="Source1" />
+              <Edge From="1" To="2" Label="Source1" />
+              <Edge From="2" To="3" Label="Source1" />
+            </Edges>
+          </Workflow>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="rx:Zip" />
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Index" />
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="scr:ExpressionTransform">
+          <scr:Expression>it.max(1, false)</scr:Expression>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="MemberSelector">
+          <Selector>Item2</Selector>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="rx:BehaviorSubject">
+          <Name>FilteredScores</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="gl:CreateWindow">
+            <gl:Width>640</gl:Width>
+            <gl:Height>480</gl:Height>
+            <gl:VSync>On</gl:VSync>
+            <gl:SwapSync>false</gl:SwapSync>
+            <gl:ClearColor>Black</gl:ClearColor>
+            <gl:ClearMask>DepthBufferBit ColorBufferBit</gl:ClearMask>
+            <gl:CursorVisible>true</gl:CursorVisible>
+            <gl:Location xsi:nil="true" />
+            <gl:WindowBorder>Resizable</gl:WindowBorder>
+            <gl:WindowState>Normal</gl:WindowState>
+            <gl:DisplayDevice>Primary</gl:DisplayDevice>
+            <gl:TargetRenderFrequency>60</gl:TargetRenderFrequency>
+            <gl:TargetUpdateFrequency xsi:nil="true" />
+            <gl:RenderState />
+            <gl:GraphicsMode>
+              <gl:ColorFormat>
+                <gl:Red>8</gl:Red>
+                <gl:Green>8</gl:Green>
+                <gl:Blue>8</gl:Blue>
+                <gl:Alpha>8</gl:Alpha>
+              </gl:ColorFormat>
+              <gl:Depth>16</gl:Depth>
+              <gl:Stencil>0</gl:Stencil>
+              <gl:Samples>0</gl:Samples>
+              <gl:AccumulatorFormat>
+                <gl:Red>0</gl:Red>
+                <gl:Green>0</gl:Green>
+                <gl:Blue>0</gl:Blue>
+                <gl:Alpha>0</gl:Alpha>
+              </gl:AccumulatorFormat>
+              <gl:Buffers>2</gl:Buffers>
+              <gl:Stereo>false</gl:Stereo>
+            </gl:GraphicsMode>
+          </Combinator>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="gl:TextureResources">
+            <gl:Textures>
+              <gl:TextureConfiguration xsi:type="gl:Texture2D">
+                <gl:Name>image</gl:Name>
+                <gl:Width xsi:nil="true" />
+                <gl:Height xsi:nil="true" />
+                <gl:InternalFormat>Rgba</gl:InternalFormat>
+                <gl:WrapS>Repeat</gl:WrapS>
+                <gl:WrapT>Repeat</gl:WrapT>
+                <gl:MinFilter>Linear</gl:MinFilter>
+                <gl:MagFilter>Linear</gl:MagFilter>
+              </gl:TextureConfiguration>
+            </gl:Textures>
+          </Combinator>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="IncludeWorkflow" Path="BonVision:Primitives.BonVisionResources.bonsai" />
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="res:LoadResources" />
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="gl:RenderFrame" />
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="IncludeWorkflow" Path="BonVision:Environment.NormalizedView.bonsai" />
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="rx:PublishSubject">
+          <Name>Draw</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>Draw</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="IncludeWorkflow" Path="BonVision:Primitives.DrawImage.bonsai">
+          <TextureName>image</TextureName>
+          <ExtentX>1</ExtentX>
+          <ExtentY>1</ExtentY>
+          <LocationX>0</LocationX>
+          <LocationY>0</LocationY>
+          <Layer>0</Layer>
+          <Angle>0</Angle>
+          <ScaleX>1</ScaleX>
+          <ScaleY>1</ScaleY>
+          <ShiftX>0</ShiftX>
+          <ShiftY>0</ShiftY>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>Image</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="gl:UpdateTexture">
+            <gl:TextureName>image</gl:TextureName>
+            <gl:TextureTarget>Texture2D</gl:TextureTarget>
+            <gl:InternalFormat>Rgba</gl:InternalFormat>
+          </Combinator>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>Draw</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>FilteredBoundingBoxes</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="rx:Condition">
+          <Workflow>
+            <Nodes>
+              <Expression xsi:type="WorkflowInput">
+                <Name>Source1</Name>
+              </Expression>
+              <Expression xsi:type="scr:ExpressionTransform">
+                <scr:Expression>it.numel() &gt; 0</scr:Expression>
+              </Expression>
+              <Expression xsi:type="WorkflowOutput" />
+            </Nodes>
+            <Edges>
+              <Edge From="0" To="1" Label="Source1" />
+              <Edge From="1" To="2" Label="Source1" />
+            </Edges>
+          </Workflow>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="p1:Index">
+            <p1:Indexes>0,0</p1:Indexes>
+          </Combinator>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="PropertyMapping">
+          <PropertyMappings>
+            <Property Name="LocationX" />
+          </PropertyMappings>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>FilteredBoundingBoxes</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="rx:Condition">
+          <Workflow>
+            <Nodes>
+              <Expression xsi:type="WorkflowInput">
+                <Name>Source1</Name>
+              </Expression>
+              <Expression xsi:type="scr:ExpressionTransform">
+                <scr:Expression>it.numel() &gt; 0</scr:Expression>
+              </Expression>
+              <Expression xsi:type="WorkflowOutput" />
+            </Nodes>
+            <Edges>
+              <Edge From="0" To="1" Label="Source1" />
+              <Edge From="1" To="2" Label="Source1" />
+            </Edges>
+          </Workflow>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="p1:Index">
+            <p1:Indexes>0,1</p1:Indexes>
+          </Combinator>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="PropertyMapping">
+          <PropertyMappings>
+            <Property Name="LocationY" />
+          </PropertyMappings>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>FilteredBoundingBoxes</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="rx:Condition">
+          <Workflow>
+            <Nodes>
+              <Expression xsi:type="WorkflowInput">
+                <Name>Source1</Name>
+              </Expression>
+              <Expression xsi:type="scr:ExpressionTransform">
+                <scr:Expression>it.numel() &gt; 0</scr:Expression>
+              </Expression>
+              <Expression xsi:type="WorkflowOutput" />
+            </Nodes>
+            <Edges>
+              <Edge From="0" To="1" Label="Source1" />
+              <Edge From="1" To="2" Label="Source1" />
+            </Edges>
+          </Workflow>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="p1:Index">
+            <p1:Indexes>0,2</p1:Indexes>
+          </Combinator>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="PropertyMapping">
+          <PropertyMappings>
+            <Property Name="ExtentX" />
+          </PropertyMappings>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="SubscribeSubject">
+          <Name>FilteredBoundingBoxes</Name>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="rx:Condition">
+          <Workflow>
+            <Nodes>
+              <Expression xsi:type="WorkflowInput">
+                <Name>Source1</Name>
+              </Expression>
+              <Expression xsi:type="scr:ExpressionTransform">
+                <scr:Expression>it.numel() &gt; 0</scr:Expression>
+              </Expression>
+              <Expression xsi:type="WorkflowOutput" />
+            </Nodes>
+            <Edges>
+              <Edge From="0" To="1" Label="Source1" />
+              <Edge From="1" To="2" Label="Source1" />
+            </Edges>
+          </Workflow>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="Combinator">
+          <Combinator xsi:type="p1:Index">
+            <p1:Indexes>0,3</p1:Indexes>
+          </Combinator>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="PropertyMapping">
+          <PropertyMappings>
+            <Property Name="ExtentY" />
+          </PropertyMappings>
+        </Builder>
+      </Expression>
+      <Expression xsi:type="Disable">
+        <Builder xsi:type="IncludeWorkflow" Path="BonVision:Primitives.DrawQuad.bonsai">
+          <ExtentX>0.0180172529</ExtentX>
+          <ExtentY>0.06236189</ExtentY>
+          <LocationX>0.4609882</LocationX>
+          <LocationY>0.71193254</LocationY>
+          <Layer>1</Layer>
+          <Angle>0</Angle>
+          <ColorR>1</ColorR>
+          <ColorG>0</ColorG>
+          <ColorB>0</ColorB>
+          <ColorA>0.5</ColorA>
+        </Builder>
+      </Expression>
+    </Nodes>
+    <Edges>
+      <Edge From="0" To="1" Label="Source1" />
+      <Edge From="1" To="2" Label="Source1" />
+      <Edge From="2" To="3" Label="Source1" />
+      <Edge From="4" To="5" Label="Source1" />
+      <Edge From="6" To="7" Label="Source1" />
+      <Edge From="8" To="9" Label="Source1" />
+      <Edge From="9" To="10" Label="Source1" />
+      <Edge From="11" To="14" Label="Source1" />
+      <Edge From="12" To="13" Label="Source1" />
+      <Edge From="13" To="14" Label="Source2" />
+      <Edge From="14" To="15" Label="Source1" />
+      <Edge From="15" To="16" Label="Source1" />
+      <Edge From="16" To="21" Label="Source1" />
+      <Edge From="17" To="18" Label="Source1" />
+      <Edge From="18" To="19" Label="Source1" />
+      <Edge From="19" To="20" Label="Source1" />
+      <Edge From="20" To="21" Label="Source2" />
+      <Edge From="21" To="22" Label="Source1" />
+      <Edge From="23" To="24" Label="Source1" />
+      <Edge From="24" To="25" Label="Source1" />
+      <Edge From="26" To="27" Label="Source1" />
+      <Edge From="27" To="28" Label="Source1" />
+      <Edge From="29" To="30" Label="Source1" />
+      <Edge From="30" To="31" Label="Source1" />
+      <Edge From="32" To="33" Label="Source1" />
+      <Edge From="33" To="34" Label="Source1" />
+      <Edge From="35" To="37" Label="Source1" />
+      <Edge From="36" To="37" Label="Source2" />
+      <Edge From="37" To="38" Label="Source1" />
+      <Edge From="39" To="43" Label="Source1" />
+      <Edge From="40" To="41" Label="Source1" />
+      <Edge From="41" To="42" Label="Source1" />
+      <Edge From="42" To="43" Label="Source2" />
+      <Edge From="43" To="44" Label="Source1" />
+      <Edge From="44" To="45" Label="Source1" />
+      <Edge From="45" To="46" Label="Source1" />
+      <Edge From="46" To="47" Label="Source1" />
+      <Edge From="48" To="51" Label="Source1" />
+      <Edge From="49" To="50" Label="Source1" />
+      <Edge From="50" To="51" Label="Source2" />
+      <Edge From="51" To="52" Label="Source1" />
+      <Edge From="52" To="57" Label="Source1" />
+      <Edge From="53" To="54" Label="Source1" />
+      <Edge From="54" To="55" Label="Source1" />
+      <Edge From="55" To="56" Label="Source1" />
+      <Edge From="56" To="57" Label="Source2" />
+      <Edge From="57" To="58" Label="Source1" />
+      <Edge From="58" To="59" Label="Source1" />
+      <Edge From="60" To="63" Label="Source1" />
+      <Edge From="61" To="62" Label="Source1" />
+      <Edge From="62" To="63" Label="Source2" />
+      <Edge From="63" To="64" Label="Source1" />
+      <Edge From="64" To="67" Label="Source1" />
+      <Edge From="65" To="66" Label="Source1" />
+      <Edge From="66" To="67" Label="Source2" />
+      <Edge From="67" To="68" Label="Source1" />
+      <Edge From="68" To="69" Label="Source1" />
+      <Edge From="69" To="70" Label="Source1" />
+      <Edge From="70" To="71" Label="Source1" />
+      <Edge From="72" To="73" Label="Source1" />
+      <Edge From="73" To="74" Label="Source1" />
+      <Edge From="74" To="75" Label="Source1" />
+      <Edge From="76" To="77" Label="Source1" />
+      <Edge From="77" To="78" Label="Source1" />
+      <Edge From="79" To="80" Label="Source1" />
+      <Edge From="81" To="82" Label="Source1" />
+      <Edge From="83" To="100" Label="Source1" />
+      <Edge From="84" To="85" Label="Source1" />
+      <Edge From="85" To="86" Label="Source1" />
+      <Edge From="86" To="87" Label="Source1" />
+      <Edge From="87" To="100" Label="Source2" />
+      <Edge From="88" To="89" Label="Source1" />
+      <Edge From="89" To="90" Label="Source1" />
+      <Edge From="90" To="91" Label="Source1" />
+      <Edge From="91" To="100" Label="Source3" />
+      <Edge From="92" To="93" Label="Source1" />
+      <Edge From="93" To="94" Label="Source1" />
+      <Edge From="94" To="95" Label="Source1" />
+      <Edge From="95" To="100" Label="Source4" />
+      <Edge From="96" To="97" Label="Source1" />
+      <Edge From="97" To="98" Label="Source1" />
+      <Edge From="98" To="99" Label="Source1" />
+      <Edge From="99" To="100" Label="Source5" />
+    </Edges>
+  </Workflow>
+</WorkflowBuilder>

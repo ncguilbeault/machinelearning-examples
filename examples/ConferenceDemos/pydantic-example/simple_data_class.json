@@ -1,0 +1,18 @@
+{
+    "properties": {
+        "name": {
+            "title": "Name",
+            "type": "string"
+        },
+        "data": {
+            "title": "Data",
+            "type": "number"
+        }
+    },
+    "required": [
+        "name",
+        "data"
+    ],
+    "title": "SimpleDataClass",
+    "type": "object"
+}

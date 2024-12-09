@@ -1,0 +1,42 @@
+{
+    "$defs": {
+        "Trial": {
+            "properties": {
+                "id": {
+                    "title": "Id",
+                    "type": "integer"
+                },
+                "name": {
+                    "title": "Name",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "name"
+            ],
+            "title": "Trial",
+            "type": "object"
+        }
+    },
+    "properties": {
+        "id": {
+            "title": "Id",
+            "type": "integer"
+        },
+        "name": {
+            "title": "Name",
+            "type": "string"
+        },
+        "trial": {
+            "$ref": "#/$defs/Trial"
+        }
+    },
+    "required": [
+        "id",
+        "name",
+        "trial"
+    ],
+    "title": "Session",
+    "type": "object"
+}
