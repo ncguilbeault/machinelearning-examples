@@ -25,8 +25,9 @@
         </PropertyMappings>
       </Expression>
       <Expression xsi:type="Combinator">
-        <Combinator xsi:type="p2:ConstrainedStationaryTransitions">
-          <p2:TransitionMask>[[1, 1, 1], [1, 1, 1], [1, 0, 1]]</p2:TransitionMask>
+        <Combinator xsi:type="p2:StickyTransitions">
+          <p2:Alpha>1</p2:Alpha>
+          <p2:Kappa>100</p2:Kappa>
         </Combinator>
       </Expression>
       <Expression xsi:type="PropertyMapping">
@@ -47,13 +48,10 @@
         <NumStates>3</NumStates>
         <Dimensions>2</Dimensions>
         <ObservationsModelType>AutoRegressive</ObservationsModelType>
-        <TransitionsModelType>ConstrainedStationary</TransitionsModelType>
+        <TransitionsModelType>Sticky</TransitionsModelType>
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="p3:SerializeToJson" />
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="io:WriteLine" />
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="io:WriteAllText">
@@ -81,7 +79,6 @@
       <Edge From="9" To="10" Label="Source1" />
       <Edge From="10" To="11" Label="Source1" />
       <Edge From="11" To="12" Label="Source1" />
-      <Edge From="12" To="13" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>

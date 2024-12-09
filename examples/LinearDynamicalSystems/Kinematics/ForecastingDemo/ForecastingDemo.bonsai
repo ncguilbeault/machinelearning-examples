@@ -5,6 +5,7 @@
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
                  xmlns:py="clr-namespace:Bonsai.Scripting.Python;assembly=Bonsai.Scripting.Python"
                  xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
+                 xmlns:sys="clr-namespace:System;assembly=mscorlib"
                  xmlns:viz="clr-namespace:Bonsai.Design.Visualizers;assembly=Bonsai.Design.Visualizers"
                  xmlns:gui="clr-namespace:Bonsai.Gui;assembly=Bonsai.Gui"
                  xmlns="https://bonsai-rx.org/2018/workflow">
@@ -302,33 +303,25 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="py:CreateRuntime" />
       </Expression>
-      <Expression xsi:type="rx:BehaviorSubject">
-        <Name>RuntimeEngine</Name>
-      </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>RuntimeEngine</Name>
-      </Expression>
+      <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.LinearDynamicalSystems:LoadLDSModule.bonsai" />
       <Expression xsi:type="GroupWorkflow">
-        <Name>LinearDynamicalSystems:LoadLDSModule</Name>
+        <Name>CentroidWithDroppedFrames</Name>
         <Workflow>
           <Nodes>
-            <Expression xsi:type="WorkflowInput">
-              <Name>Source1</Name>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>Centroid</Name>
             </Expression>
-            <Expression xsi:type="rx:SelectMany">
-              <Name>LoadLDSModule</Name>
+            <Expression xsi:type="rx:Condition">
+              <Name>Tracking</Name>
               <Workflow>
                 <Nodes>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="py:CreateModule">
-                      <py:Name>LinearDynamicalSystems</py:Name>
-                      <py:ScriptPath>Bonsai.ML.LinearDynamicalSystems:main.py</py:ScriptPath>
-                    </Combinator>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>DropFrames</Name>
                   </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="rx:Take">
-                      <rx:Count>1</rx:Count>
-                    </Combinator>
+                  <Expression xsi:type="Equal">
+                    <Operand xsi:type="BooleanProperty">
+                      <Value>false</Value>
+                    </Operand>
                   </Expression>
                   <Expression xsi:type="WorkflowOutput" />
                 </Nodes>
@@ -338,76 +331,53 @@
                 </Edges>
               </Workflow>
             </Expression>
-            <Expression xsi:type="rx:BehaviorSubject">
-              <Name>LDSModule</Name>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>Centroid</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="cv:CreatePoint2f">
+                <cv:X>NaN</cv:X>
+                <cv:Y>NaN</cv:Y>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="rx:Condition">
+              <Name>DropFrames</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>DropFrames</Name>
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="1" Label="Source1" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Merge" />
             </Expression>
             <Expression xsi:type="WorkflowOutput" />
-          </Nodes>
-          <Edges>
-            <Edge From="0" To="1" Label="Source1" />
-            <Edge From="1" To="2" Label="Source1" />
-            <Edge From="2" To="3" Label="Source1" />
-          </Edges>
-        </Workflow>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="BooleanProperty">
-          <Value>false</Value>
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="rx:BehaviorSubject">
-        <Name>DropFrames</Name>
-      </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>Centroid</Name>
-      </Expression>
-      <Expression xsi:type="rx:Condition">
-        <Name>Tracking</Name>
-        <Workflow>
-          <Nodes>
-            <Expression xsi:type="SubscribeSubject">
-              <Name>DropFrames</Name>
-            </Expression>
-            <Expression xsi:type="Equal">
-              <Operand xsi:type="BooleanProperty">
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="BooleanProperty">
                 <Value>false</Value>
-              </Operand>
+              </Combinator>
             </Expression>
-            <Expression xsi:type="WorkflowOutput" />
-          </Nodes>
-          <Edges>
-            <Edge From="0" To="1" Label="Source1" />
-            <Edge From="1" To="2" Label="Source1" />
-          </Edges>
-        </Workflow>
-      </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>Centroid</Name>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="cv:CreatePoint2f">
-          <cv:X>NaN</cv:X>
-          <cv:Y>NaN</cv:Y>
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="rx:Condition">
-        <Name>DropFrames</Name>
-        <Workflow>
-          <Nodes>
-            <Expression xsi:type="SubscribeSubject">
+            <Expression xsi:type="rx:BehaviorSubject">
               <Name>DropFrames</Name>
             </Expression>
-            <Expression xsi:type="WorkflowOutput" />
           </Nodes>
           <Edges>
             <Edge From="0" To="1" Label="Source1" />
+            <Edge From="1" To="5" Label="Source1" />
+            <Edge From="2" To="3" Label="Source1" />
+            <Edge From="3" To="4" Label="Source1" />
+            <Edge From="4" To="5" Label="Source2" />
+            <Edge From="5" To="6" Label="Source1" />
+            <Edge From="7" To="8" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:Merge" />
-      </Expression>
-      <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.LinearDynamicalSystems:Kinematics.CreateObservation2D.bonsai" />
       <Expression xsi:type="rx:BehaviorSubject">
         <Name>Observation</Name>
       </Expression>
@@ -443,13 +413,18 @@
       <Expression xsi:type="SubscribeSubject">
         <Name>Observation</Name>
       </Expression>
-      <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.LinearDynamicalSystems:Learning.RunOptimizationAsync.bonsai">
-        <BatchSize>200</BatchSize>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:ObserveOn">
+          <rx:Scheduler>ThreadPoolScheduler</rx:Scheduler>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.LinearDynamicalSystems:Kinematics.RunOptimizationAsync.bonsai">
         <Name>model</Name>
         <sigma_a>true</sigma_a>
         <sigma_xy>true</sigma_xy>
         <m0>true</m0>
         <sqrt_diag_V0_value>true</sqrt_diag_V0_value>
+        <BatchSize>200</BatchSize>
         <NumIterations>50</NumIterations>
         <PrintConvergenceMessages>true</PrintConvergenceMessages>
       </Expression>
@@ -460,7 +435,7 @@
             <Expression xsi:type="SubscribeSubject">
               <Name>Observation</Name>
             </Expression>
-            <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.LinearDynamicalSystems:Learning.CheckOptimizationFinished.bonsai">
+            <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.LinearDynamicalSystems:Kinematics.CheckOptimizationFinished.bonsai">
               <Name>model</Name>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -539,6 +514,11 @@
       <Expression xsi:type="SubscribeSubject">
         <Name>Observation</Name>
       </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:ObserveOn">
+          <rx:Scheduler>ThreadPoolScheduler</rx:Scheduler>
+        </Combinator>
+      </Expression>
       <Expression xsi:type="SubscribeSubject">
         <Name>ModelParameters</Name>
       </Expression>
@@ -551,11 +531,8 @@
       <Expression xsi:type="rx:BehaviorSubject">
         <Name>InferredKinematics</Name>
       </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>Timesteps</Name>
-      </Expression>
-      <Expression xsi:type="scr:ExpressionTransform">
-        <scr:Expression>Convert.ToInt32(it)</scr:Expression>
+      <Expression xsi:type="rx:BehaviorSubject" TypeArguments="sys:Int32">
+        <rx:Name>Timesteps</rx:Name>
       </Expression>
       <Expression xsi:type="PropertyMapping">
         <PropertyMappings>
@@ -564,7 +541,7 @@
       </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.LinearDynamicalSystems:Kinematics.PerformForecasting.bonsai">
         <Name>model</Name>
-        <Timesteps>38</Timesteps>
+        <Timesteps>31</Timesteps>
       </Expression>
       <Expression xsi:type="rx:BehaviorSubject">
         <Name>Forecast</Name>
@@ -599,8 +576,8 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="cv:CreatePoint2f">
-                <cv:X>136.201477</cv:X>
-                <cv:Y>290.267822</cv:Y>
+                <cv:X>333.75824</cv:X>
+                <cv:Y>148.690628</cv:Y>
               </Combinator>
             </Expression>
             <Expression xsi:type="VisualizerMapping" />
@@ -655,10 +632,28 @@
                     <gui:Minimum>1</gui:Minimum>
                     <gui:Maximum>100</gui:Maximum>
                     <gui:DecimalPlaces>0</gui:DecimalPlaces>
-                    <gui:Value>38</gui:Value>
+                    <gui:Value>31</gui:Value>
                   </Expression>
-                  <Expression xsi:type="rx:BehaviorSubject">
-                    <Name>Timesteps</Name>
+                  <Expression xsi:type="rx:Sink">
+                    <Workflow>
+                      <Nodes>
+                        <Expression xsi:type="WorkflowInput">
+                          <Name>Source1</Name>
+                        </Expression>
+                        <Expression xsi:type="scr:ExpressionTransform">
+                          <scr:Expression>Convert.ToInt32(it)</scr:Expression>
+                        </Expression>
+                        <Expression xsi:type="MulticastSubject">
+                          <Name>Timesteps</Name>
+                        </Expression>
+                        <Expression xsi:type="WorkflowOutput" />
+                      </Nodes>
+                      <Edges>
+                        <Edge From="0" To="1" Label="Source1" />
+                        <Edge From="1" To="2" Label="Source1" />
+                        <Edge From="2" To="3" Label="Source1" />
+                      </Edges>
+                    </Workflow>
                   </Expression>
                   <Expression xsi:type="VisualizerMapping" />
                   <Expression xsi:type="gui:TableLayoutPanelBuilder">
@@ -918,40 +913,33 @@
       <Edge From="2" To="3" Label="Source1" />
       <Edge From="4" To="5" Label="Source1" />
       <Edge From="6" To="7" Label="Source1" />
+      <Edge From="7" To="8" Label="Source1" />
       <Edge From="8" To="9" Label="Source1" />
-      <Edge From="9" To="13" Label="Source1" />
       <Edge From="10" To="11" Label="Source1" />
       <Edge From="11" To="12" Label="Source1" />
-      <Edge From="12" To="13" Label="Source2" />
+      <Edge From="12" To="13" Label="Source1" />
       <Edge From="13" To="14" Label="Source1" />
-      <Edge From="14" To="15" Label="Source1" />
-      <Edge From="16" To="17" Label="Source1" />
-      <Edge From="17" To="18" Label="Source1" />
+      <Edge From="14" To="16" Label="Source1" />
+      <Edge From="15" To="16" Label="Source2" />
+      <Edge From="16" To="18" Label="Source1" />
+      <Edge From="17" To="18" Label="Source2" />
       <Edge From="18" To="19" Label="Source1" />
       <Edge From="20" To="21" Label="Source1" />
       <Edge From="21" To="22" Label="Source1" />
       <Edge From="22" To="23" Label="Source1" />
-      <Edge From="23" To="25" Label="Source1" />
-      <Edge From="24" To="25" Label="Source2" />
+      <Edge From="24" To="25" Label="Source1" />
       <Edge From="25" To="27" Label="Source1" />
       <Edge From="26" To="27" Label="Source2" />
       <Edge From="27" To="28" Label="Source1" />
       <Edge From="29" To="30" Label="Source1" />
-      <Edge From="30" To="31" Label="Source1" />
-      <Edge From="31" To="32" Label="Source1" />
+      <Edge From="30" To="32" Label="Source1" />
+      <Edge From="31" To="32" Label="Source2" />
+      <Edge From="32" To="33" Label="Source1" />
       <Edge From="33" To="34" Label="Source1" />
-      <Edge From="34" To="36" Label="Source1" />
-      <Edge From="35" To="36" Label="Source2" />
-      <Edge From="36" To="37" Label="Source1" />
-      <Edge From="38" To="40" Label="Source1" />
-      <Edge From="39" To="40" Label="Source2" />
-      <Edge From="40" To="41" Label="Source1" />
-      <Edge From="41" To="42" Label="Source1" />
-      <Edge From="42" To="46" Label="Source1" />
-      <Edge From="43" To="44" Label="Source1" />
-      <Edge From="44" To="45" Label="Source1" />
-      <Edge From="45" To="46" Label="Source2" />
-      <Edge From="46" To="47" Label="Source1" />
+      <Edge From="34" To="37" Label="Source1" />
+      <Edge From="35" To="36" Label="Source1" />
+      <Edge From="36" To="37" Label="Source2" />
+      <Edge From="37" To="38" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>

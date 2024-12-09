@@ -1,0 +1,19 @@
+{
+    "configurations": [
+        {
+            "type": "clr",
+            "request": "launch",
+            "name": "Launch Extensions",
+            "program": "${workspaceFolder}/.bonsai/Bonsai.exe",
+            "args": ["--lib", "${workspaceFolder}/Extensions"],
+            "stopAtEntry": false,
+            "justMyCode": false
+        },
+        {
+            "type": "clr",
+            "request": "attach",
+            "name": "Attach to Extensions",
+            "processId": "${command:pickProcess}"
+        }
+    ]
+}

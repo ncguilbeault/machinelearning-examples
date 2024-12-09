@@ -4,8 +4,10 @@
                  xmlns:py="clr-namespace:Bonsai.Scripting.Python;assembly=Bonsai.Scripting.Python"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
                  xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
+                 xmlns:p1="clr-namespace:Bonsai.ML.HiddenMarkovModels.Observations;assembly=Bonsai.ML.HiddenMarkovModels"
+                 xmlns:p2="clr-namespace:Bonsai.ML.HiddenMarkovModels.Transitions;assembly=Bonsai.ML.HiddenMarkovModels"
+                 xmlns:p3="clr-namespace:Bonsai.ML.HiddenMarkovModels;assembly=Bonsai.ML.HiddenMarkovModels"
                  xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
-                 xmlns:p1="clr-namespace:Bonsai.ML.Python;assembly=Bonsai.ML.Python"
                  xmlns:gui="clr-namespace:Bonsai.Gui;assembly=Bonsai.Gui"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
@@ -327,8 +329,8 @@
       <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.LinearDynamicalSystems:Kinematics.CreateKFModel.bonsai">
         <Name>KFmodel</Name>
         <Fps>60</Fps>
-        <Pos_x0>675.37530517578125</Pos_x0>
-        <Pos_y0>384.825927734375</Pos_y0>
+        <Pos_x0>640.79437255859375</Pos_x0>
+        <Pos_y0>461.79840087890625</Pos_y0>
         <Vel_x0>0</Vel_x0>
         <Vel_y0>0</Vel_y0>
         <Acc_x0>0</Acc_x0>
@@ -341,121 +343,86 @@
       <Expression xsi:type="rx:BehaviorSubject">
         <Name>KFParameters</Name>
       </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p1:GaussianObservations" />
+      </Expression>
+      <Expression xsi:type="PropertyMapping">
+        <PropertyMappings>
+          <Property Name="Observations" />
+        </PropertyMappings>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p2:StickyTransitions">
+          <p2:Alpha>1</p2:Alpha>
+          <p2:Kappa>1000</p2:Kappa>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="PropertyMapping">
+        <PropertyMappings>
+          <Property Name="Transitions" />
+        </PropertyMappings>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="p3:StateParameters" />
+      </Expression>
+      <Expression xsi:type="PropertyMapping">
+        <PropertyMappings>
+          <Property Name="StateParameters" />
+        </PropertyMappings>
+      </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.HiddenMarkovModels:CreateHMM.bonsai">
         <Name>hmm</Name>
         <NumStates>6</NumStates>
         <Dimensions>2</Dimensions>
         <ObservationsModelType>Gaussian</ObservationsModelType>
-        <TransitionsModelType>Stationary</TransitionsModelType>
+        <TransitionsModelType>Sticky</TransitionsModelType>
       </Expression>
       <Expression xsi:type="rx:BehaviorSubject">
         <Name>HMMParameters</Name>
       </Expression>
-      <Expression xsi:type="rx:Defer">
-        <Name>PerformKFInference</Name>
-        <Workflow>
-          <Nodes>
-            <Expression xsi:type="SubscribeSubject">
-              <Name>Centroid</Name>
-            </Expression>
-            <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.LinearDynamicalSystems:Kinematics.PerformInference.bonsai">
-              <Name>KFmodel</Name>
-            </Expression>
-            <Expression xsi:type="WorkflowOutput" />
-          </Nodes>
-          <Edges>
-            <Edge From="0" To="1" Label="Source1" />
-            <Edge From="1" To="2" Label="Source1" />
-          </Edges>
-        </Workflow>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>Centroid</Name>
+      </Expression>
+      <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.LinearDynamicalSystems:Kinematics.PerformInference.bonsai">
+        <Name>KFmodel</Name>
       </Expression>
       <Expression xsi:type="rx:BehaviorSubject">
         <Name>KinematicState</Name>
       </Expression>
-      <Expression xsi:type="rx:SelectMany">
-        <Name>FeatureExtraction</Name>
-        <Workflow>
-          <Nodes>
-            <Expression xsi:type="SubscribeSubject">
-              <Name>KinematicState</Name>
-            </Expression>
-            <Expression xsi:type="scr:ExpressionTransform">
-              <scr:Expression>Math.Sqrt(Math.Pow(it.Velocity.X.Mean, 2) + Math.Pow(it.Velocity.Y.Mean, 2))</scr:Expression>
-            </Expression>
-            <Expression xsi:type="SubscribeSubject">
-              <Name>KinematicState</Name>
-            </Expression>
-            <Expression xsi:type="scr:ExpressionTransform">
-              <scr:Expression>Math.Sqrt(Math.Pow(it.Acceleration.X.Mean, 2) + Math.Pow(it.Acceleration.Y.Mean, 2))</scr:Expression>
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="rx:Zip" />
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:FormatToPython" />
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="rx:Take">
-                <rx:Count>1</rx:Count>
-              </Combinator>
-            </Expression>
-            <Expression xsi:type="WorkflowOutput" />
-          </Nodes>
-          <Edges>
-            <Edge From="0" To="1" Label="Source1" />
-            <Edge From="1" To="4" Label="Source1" />
-            <Edge From="2" To="3" Label="Source1" />
-            <Edge From="3" To="4" Label="Source2" />
-            <Edge From="4" To="5" Label="Source1" />
-            <Edge From="5" To="6" Label="Source1" />
-            <Edge From="6" To="7" Label="Source1" />
-          </Edges>
-        </Workflow>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>KinematicState</Name>
+      </Expression>
+      <Expression xsi:type="scr:ExpressionTransform">
+        <scr:Expression>Math.Sqrt(Math.Pow(it.Velocity.X.Mean, 2) + Math.Pow(it.Velocity.Y.Mean, 2))</scr:Expression>
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>KinematicState</Name>
+      </Expression>
+      <Expression xsi:type="scr:ExpressionTransform">
+        <scr:Expression>Math.Sqrt(Math.Pow(it.Acceleration.X.Mean, 2) + Math.Pow(it.Acceleration.Y.Mean, 2))</scr:Expression>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:Zip" />
       </Expression>
       <Expression xsi:type="rx:BehaviorSubject">
         <Name>HMMObservation</Name>
       </Expression>
       <Expression xsi:type="SubscribeSubject">
-        <Name>HMMFitFinished</Name>
+        <Name>HMMObservation</Name>
       </Expression>
       <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:WithLatestFrom" />
+        <Combinator xsi:type="rx:ObserveOn">
+          <rx:Scheduler>ThreadPoolScheduler</rx:Scheduler>
+        </Combinator>
       </Expression>
-      <Expression xsi:type="rx:SelectMany">
-        <Name>InferHMMState</Name>
-        <Workflow>
-          <Nodes>
-            <Expression xsi:type="SubscribeSubject">
-              <Name>HMMObservation</Name>
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="rx:Take">
-                <rx:Count>1</rx:Count>
-              </Combinator>
-            </Expression>
-            <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.HiddenMarkovModels:InferState.bonsai">
-              <Name>hmm</Name>
-            </Expression>
-            <Expression xsi:type="WorkflowOutput" />
-          </Nodes>
-          <Edges>
-            <Edge From="0" To="1" Label="Source1" />
-            <Edge From="1" To="2" Label="Source1" />
-            <Edge From="2" To="3" Label="Source1" />
-          </Edges>
-        </Workflow>
+      <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.HiddenMarkovModels:InferState.bonsai">
+        <Name>hmm</Name>
       </Expression>
       <Expression xsi:type="rx:BehaviorSubject">
         <Name>HMMStateProbabilities</Name>
       </Expression>
       <Expression xsi:type="SubscribeSubject">
-        <Name>HMMParameters</Name>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:SubscribeWhen" />
-      </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>KFParameters</Name>
+        <Name>HMMFitFinished</Name>
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:SubscribeWhen" />
@@ -463,9 +430,14 @@
       <Expression xsi:type="SubscribeSubject">
         <Name>HMMObservation</Name>
       </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:ObserveOn">
+          <rx:Scheduler>ThreadPoolScheduler</rx:Scheduler>
+        </Combinator>
+      </Expression>
       <Expression xsi:type="IncludeWorkflow" Path="Bonsai.ML.HiddenMarkovModels:RunFitAsync.bonsai">
         <Name>hmm</Name>
-        <BatchSize>1000</BatchSize>
+        <BatchSize>2000</BatchSize>
         <NumIterations>50</NumIterations>
         <FlushDataBetweenBatches>true</FlushDataBetweenBatches>
         <InitialStateDistribution>true</InitialStateDistribution>
@@ -503,8 +475,8 @@
                   </Expression>
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="cv:CreatePoint2f">
-                      <cv:X>288.138367</cv:X>
-                      <cv:Y>140.747131</cv:Y>
+                      <cv:X>639.8446</cv:X>
+                      <cv:Y>392.113678</cv:Y>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="VisualizerMapping" />
@@ -564,21 +536,29 @@
       <Edge From="9" To="10" Label="Source1" />
       <Edge From="10" To="11" Label="Source1" />
       <Edge From="12" To="13" Label="Source1" />
+      <Edge From="13" To="16" Label="Source1" />
       <Edge From="14" To="15" Label="Source1" />
-      <Edge From="15" To="16" Label="Source1" />
+      <Edge From="15" To="16" Label="Source2" />
       <Edge From="16" To="17" Label="Source1" />
-      <Edge From="17" To="19" Label="Source1" />
-      <Edge From="18" To="19" Label="Source2" />
-      <Edge From="19" To="20" Label="Source1" />
+      <Edge From="17" To="18" Label="Source1" />
+      <Edge From="18" To="19" Label="Source1" />
       <Edge From="20" To="21" Label="Source1" />
-      <Edge From="21" To="23" Label="Source1" />
-      <Edge From="22" To="23" Label="Source2" />
-      <Edge From="23" To="25" Label="Source1" />
-      <Edge From="24" To="25" Label="Source2" />
-      <Edge From="26" To="27" Label="Source1" />
+      <Edge From="21" To="22" Label="Source1" />
+      <Edge From="23" To="24" Label="Source1" />
+      <Edge From="24" To="27" Label="Source1" />
+      <Edge From="25" To="26" Label="Source1" />
+      <Edge From="26" To="27" Label="Source2" />
       <Edge From="27" To="28" Label="Source1" />
-      <Edge From="28" To="29" Label="Source1" />
       <Edge From="29" To="30" Label="Source1" />
+      <Edge From="30" To="31" Label="Source1" />
+      <Edge From="31" To="32" Label="Source1" />
+      <Edge From="32" To="34" Label="Source1" />
+      <Edge From="33" To="34" Label="Source2" />
+      <Edge From="35" To="36" Label="Source1" />
+      <Edge From="36" To="37" Label="Source1" />
+      <Edge From="37" To="38" Label="Source1" />
+      <Edge From="38" To="39" Label="Source1" />
+      <Edge From="39" To="40" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>
