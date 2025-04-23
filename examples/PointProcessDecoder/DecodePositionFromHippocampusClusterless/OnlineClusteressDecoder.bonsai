@@ -64,7 +64,7 @@
                   <p2:double>15</p2:double>
                 </p2:ObservationBandwidth>
                 <p2:EncoderType>ClusterlessMarks</p2:EncoderType>
-                <p2:KernelLimit xsi:nil="true" />
+                <p2:KernelLimit>20000</p2:KernelLimit>
                 <p2:NUnits xsi:nil="true" />
                 <p2:MarkDimensions>4</p2:MarkDimensions>
                 <p2:MarkChannels>28</p2:MarkChannels>
@@ -166,8 +166,8 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="cv:CreatePoint2d">
-                <cv:X>119.92543610259369</cv:X>
-                <cv:Y>31.923501968383789</cv:Y>
+                <cv:X></cv:X>
+                <cv:Y></cv:Y>
               </Combinator>
             </Expression>
             <Expression xsi:type="rx:PublishSubject">
@@ -325,8 +325,8 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="cv:CreatePoint2d">
-                <cv:X>83.265304565429688</cv:X>
-                <cv:Y>71.0204086303711</cv:Y>
+                <cv:X></cv:X>
+                <cv:Y></cv:Y>
               </Combinator>
             </Expression>
             <Expression xsi:type="WorkflowOutput" />
