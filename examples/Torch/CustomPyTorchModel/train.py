@@ -88,15 +88,23 @@ if __name__ == '__main__':
     optimizer = optim.Adadelta(model.parameters(), lr=1)
     scheduler = StepLR(optimizer, step_size=1, gamma=0.7)
 
+    # Create directory to save the model
+    os.makedirs("models", exist_ok=True)
+    os.makedirs(os.path.join("models", "checkpoints"), exist_ok=True)
+
+    # Training loop
     model.train()
+    best_loss = float('inf')
 
     for epoch in range(1, 21):
+        total_loss = 0
         # Train the model
         for batch_idx, (data, target) in enumerate(train_loader):
             data, target = data.to(device), target.to(device)
             optimizer.zero_grad()
             output = model(data)
             loss = F.nll_loss(output, target)
+            total_loss += loss.item()
             loss.backward()
             optimizer.step()
             if batch_idx % 10 == 0:
@@ -105,11 +113,6 @@ if __name__ == '__main__':
                     100. * batch_idx / len(train_loader), loss.item()))
                         
         scheduler.step()
-
-    # Save the trained model using torch.jit.trace
-    os.makedirs("models", exist_ok=True)
-    example_input = torch.rand(1, 1, 28, 28).to(device)
-    with torch.no_grad():
-        model.eval()
-        traced_model = torch.jit.trace(model, example_input)
-        traced_model.save(os.path.join("models", "custom_pytorch_model.pt"))
+        if not os.path.exists(os.path.join("models", "checkpoints", "custom_pytorch_model_best.pt")) or total_loss < best_loss:
+            best_loss = total_loss
+            torch.save(model.state_dict(), os.path.join("models", "checkpoints", "custom_pytorch_model_best.pt"))

@@ -36,6 +36,26 @@ update_paths_to_windows() {
     done
 }
 
+run_bonsai_on_linux() {
+    if [[ ! -v BONSAI_RUNTIME_APPLICATION ]]; then
+        echo "BONSAI_RUNTIME_APPLICATION environment variable is not set. Setting the default to 'wine'."
+        BONSAI_RUNTIME_APPLICATION="wine"
+    fi
+
+    case "$BONSAI_RUNTIME_APPLICATION" in
+        "mono")
+            mono "$BONSAI_EXE_PATH" "$@"
+            ;;
+        "wine")
+            wine "$BONSAI_EXE_PATH" "$@"
+            ;;
+        *)
+            echo "The BONSAI_RUNTIME_APPLICATION environment variable is not recognized. Please set it to either 'mono' or 'wine' to run Bonsai on linux."
+            exit 1
+            ;;
+    esac
+}
+
 if [[ -v BONSAI_EXE_PATH ]]; then
     if [ ! -f "$BONSAI_EXE_PATH" ]; then
         bash "$BONSAI_ENV_DIR"/Setup.sh
@@ -46,10 +66,10 @@ if [[ -v BONSAI_EXE_PATH ]]; then
             echo "Updating paths to Linux format..."
             trap cleanup EXIT INT TERM
             update_paths_to_linux
-            mono "$BONSAI_EXE_PATH" "$@"
+            run_bonsai_on_linux "$@"
             cleanup
         else
-            mono "$BONSAI_EXE_PATH" "$@"
+            run_bonsai_on_linux "$@"
         fi
     fi
 else
