@@ -9,6 +9,8 @@
                  xmlns:p5="clr-namespace:Bonsai.ML.Torch.Vision;assembly=Bonsai.ML.Torch"
                  xmlns:sys="clr-namespace:System;assembly=mscorlib"
                  xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
+                 xmlns:p6="clr-namespace:Bonsai.ML.Torch.NeuralNets.Optimizer;assembly=Bonsai.ML.Torch"
+                 xmlns:p7="clr-namespace:Bonsai.ML.Torch.NeuralNets.Loss;assembly=Bonsai.ML.Torch"
                  xmlns:gui="clr-namespace:Bonsai.Gui;assembly=Bonsai.Gui"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
@@ -319,7 +321,7 @@
               </PropertyMappings>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p3:LoadModuleFromArchitecture">
+              <Combinator xsi:type="p3:LoadModuleArchitecture">
                 <p3:ModelArchitecture>Mnist</p3:ModelArchitecture>
                 <p3:NumClasses>10</p3:NumClasses>
               </Combinator>
@@ -446,10 +448,8 @@
             <Expression xsi:type="SubscribeSubject">
               <Name>Model</Name>
             </Expression>
-            <Expression xsi:type="PropertyMapping">
-              <PropertyMappings>
-                <Property Name="Model" />
-              </PropertyMappings>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:WithLatestFrom" />
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p3:Forward" />
@@ -473,9 +473,9 @@
             </Expression>
           </Nodes>
           <Edges>
-            <Edge From="0" To="3" Label="Source1" />
-            <Edge From="1" To="2" Label="Source1" />
-            <Edge From="2" To="3" Label="Source2" />
+            <Edge From="0" To="2" Label="Source1" />
+            <Edge From="1" To="2" Label="Source2" />
+            <Edge From="2" To="3" Label="Source1" />
             <Edge From="3" To="6" Label="Source1" />
             <Edge From="4" To="5" Label="Source1" />
             <Edge From="5" To="6" Label="Source2" />
@@ -498,6 +498,36 @@
             </Expression>
             <Expression xsi:type="rx:BehaviorSubject">
               <Name>BatchSize</Name>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>Model</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p3:CollectParameters" />
+            </Expression>
+            <Expression xsi:type="p3:OptimizerBuilder">
+              <p3:OptimizerModule xsi:type="p6:Adam">
+                <p6:LearningRate>0.001</p6:LearningRate>
+                <p6:BetaGradient>0.9</p6:BetaGradient>
+                <p6:BetaSquaredGradient>0.999</p6:BetaSquaredGradient>
+                <p6:Eps>1E-08</p6:Eps>
+                <p6:WeightDecay>0</p6:WeightDecay>
+                <p6:Amsgrad>false</p6:Amsgrad>
+                <p6:Maximize>false</p6:Maximize>
+              </p3:OptimizerModule>
+            </Expression>
+            <Expression xsi:type="rx:BehaviorSubject">
+              <Name>Optimizer</Name>
+            </Expression>
+            <Expression xsi:type="p3:LossModuleBuilder">
+              <p3:LossModule xsi:type="p7:NegativeLogLikelihood">
+                <p7:Weight />
+                <p7:Reduction>Mean</p7:Reduction>
+                <p7:Type>Float32</p7:Type>
+              </p3:LossModule>
+            </Expression>
+            <Expression xsi:type="rx:BehaviorSubject">
+              <Name>Criterion</Name>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
               <Name>ProcessedImage</Name>
@@ -528,6 +558,45 @@
               <Combinator xsi:type="p2:Concat">
                 <p2:Dimension>0</p2:Dimension>
               </Combinator>
+            </Expression>
+            <Expression xsi:type="rx:Sink">
+              <Name>ZeroGrad</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>Optimizer</Name>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:WithLatestFrom" />
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Item2</Selector>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="p3:ZeroGradient" />
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="2" Label="Source1" />
+                  <Edge From="1" To="2" Label="Source2" />
+                  <Edge From="2" To="3" Label="Source1" />
+                  <Edge From="3" To="4" Label="Source1" />
+                  <Edge From="4" To="5" Label="Source1" />
+                </Edges>
+              </Workflow>
+            </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>Model</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:WithLatestFrom" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p3:Forward" />
             </Expression>
             <Expression xsi:type="SubscribeSubject">
               <Name>ProcessedLabel</Name>
@@ -563,18 +632,46 @@
               <Combinator xsi:type="rx:Zip" />
             </Expression>
             <Expression xsi:type="SubscribeSubject">
-              <Name>Model</Name>
-            </Expression>
-            <Expression xsi:type="PropertyMapping">
-              <PropertyMappings>
-                <Property Name="Model" />
-              </PropertyMappings>
+              <Name>Criterion</Name>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p3:Backward">
-                <p3:Optimizer>Adam</p3:Optimizer>
-                <p3:Loss>NegativeLogLikelihood</p3:Loss>
-              </Combinator>
+              <Combinator xsi:type="rx:WithLatestFrom" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p3:Forward" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p3:Backward" />
+            </Expression>
+            <Expression xsi:type="rx:Sink">
+              <Name>Step</Name>
+              <Workflow>
+                <Nodes>
+                  <Expression xsi:type="WorkflowInput">
+                    <Name>Source1</Name>
+                  </Expression>
+                  <Expression xsi:type="SubscribeSubject">
+                    <Name>Optimizer</Name>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="rx:WithLatestFrom" />
+                  </Expression>
+                  <Expression xsi:type="MemberSelector">
+                    <Selector>Item2</Selector>
+                  </Expression>
+                  <Expression xsi:type="Combinator">
+                    <Combinator xsi:type="p3:OptimizationStep" />
+                  </Expression>
+                  <Expression xsi:type="WorkflowOutput" />
+                </Nodes>
+                <Edges>
+                  <Edge From="0" To="2" Label="Source1" />
+                  <Edge From="1" To="2" Label="Source2" />
+                  <Edge From="2" To="3" Label="Source1" />
+                  <Edge From="3" To="4" Label="Source1" />
+                  <Edge From="4" To="5" Label="Source1" />
+                </Edges>
+              </Workflow>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
               <Name>CPU</Name>
@@ -612,35 +709,54 @@
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:TakeUntil" />
             </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>Model</Name>
+            </Expression>
+            <Expression xsi:type="PropertyMapping">
+              <PropertyMappings>
+                <Property Name="Model" />
+              </PropertyMappings>
+            </Expression>
           </Nodes>
           <Edges>
             <Edge From="0" To="1" Label="Source1" />
             <Edge From="1" To="2" Label="Source1" />
-            <Edge From="3" To="8" Label="Source1" />
+            <Edge From="3" To="4" Label="Source1" />
             <Edge From="4" To="5" Label="Source1" />
-            <Edge From="5" To="8" Label="Source2" />
-            <Edge From="6" To="7" Label="Source1" />
-            <Edge From="7" To="8" Label="Source3" />
-            <Edge From="8" To="9" Label="Source1" />
-            <Edge From="9" To="17" Label="Source1" />
-            <Edge From="10" To="15" Label="Source1" />
-            <Edge From="11" To="12" Label="Source1" />
-            <Edge From="12" To="15" Label="Source2" />
-            <Edge From="13" To="14" Label="Source1" />
-            <Edge From="14" To="15" Label="Source3" />
+            <Edge From="5" To="6" Label="Source1" />
+            <Edge From="7" To="8" Label="Source1" />
+            <Edge From="9" To="14" Label="Source1" />
+            <Edge From="10" To="11" Label="Source1" />
+            <Edge From="11" To="14" Label="Source2" />
+            <Edge From="12" To="13" Label="Source1" />
+            <Edge From="13" To="14" Label="Source3" />
+            <Edge From="14" To="15" Label="Source1" />
             <Edge From="15" To="16" Label="Source1" />
-            <Edge From="16" To="17" Label="Source2" />
-            <Edge From="17" To="20" Label="Source1" />
+            <Edge From="16" To="18" Label="Source1" />
+            <Edge From="17" To="18" Label="Source2" />
             <Edge From="18" To="19" Label="Source1" />
-            <Edge From="19" To="20" Label="Source2" />
-            <Edge From="20" To="23" Label="Source1" />
+            <Edge From="19" To="27" Label="Source1" />
+            <Edge From="20" To="25" Label="Source1" />
             <Edge From="21" To="22" Label="Source1" />
-            <Edge From="22" To="23" Label="Source2" />
+            <Edge From="22" To="25" Label="Source2" />
             <Edge From="23" To="24" Label="Source1" />
-            <Edge From="24" To="25" Label="Source1" />
-            <Edge From="25" To="28" Label="Source1" />
-            <Edge From="26" To="27" Label="Source1" />
-            <Edge From="27" To="28" Label="Source2" />
+            <Edge From="24" To="25" Label="Source3" />
+            <Edge From="25" To="26" Label="Source1" />
+            <Edge From="26" To="27" Label="Source2" />
+            <Edge From="27" To="29" Label="Source1" />
+            <Edge From="28" To="29" Label="Source2" />
+            <Edge From="29" To="30" Label="Source1" />
+            <Edge From="30" To="31" Label="Source1" />
+            <Edge From="31" To="32" Label="Source1" />
+            <Edge From="32" To="35" Label="Source1" />
+            <Edge From="33" To="34" Label="Source1" />
+            <Edge From="34" To="35" Label="Source2" />
+            <Edge From="35" To="36" Label="Source1" />
+            <Edge From="36" To="37" Label="Source1" />
+            <Edge From="37" To="40" Label="Source1" />
+            <Edge From="38" To="39" Label="Source1" />
+            <Edge From="39" To="40" Label="Source2" />
+            <Edge From="41" To="42" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
