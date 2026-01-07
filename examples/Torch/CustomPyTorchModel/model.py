@@ -3,19 +3,19 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-class CustomPyTorchModel(nn.Module):
+class MnistClassifier(nn.Module):
     """
     A simple example of a custom PyTorch model.
-    This model consists of two convolutional layers followed by two fully connected layers.
-    It is designed to work with the MNIST dataset.
+    This model consists of two convolutional layers followed by two fully connected layers with dropout.
+    It is designed to classify images from the MNIST dataset.
     """
+
     def __init__(self):
-
-        '''
+        """
         Initialize the model layers.
-        '''
+        """
 
-        super(CustomPyTorchModel, self).__init__()
+        super(MnistClassifier, self).__init__()
         self.conv1 = nn.Conv2d(1, 32, 3, 1)
         self.conv2 = nn.Conv2d(32, 64, 3, 1)
         self.dropout1 = nn.Dropout(0.25)
@@ -24,7 +24,6 @@ class CustomPyTorchModel(nn.Module):
         self.fc2 = nn.Linear(128, 10)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-
         """
         Forward pass of the model.
 
