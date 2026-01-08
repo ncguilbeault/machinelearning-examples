@@ -19,7 +19,7 @@ You can download the `ForagingMouseExampleVid.avi` video file here: [https://doi
 Below is the workflow. It is similar to the workflow that was used to infer the kinematics of a mouse during foraging (see example here)[https://github.com/bonsai-rx/machinelearning-examples/tree/main/examples/LinearDynamicalSystems/Kinematics/ForagingMouse] with the addition of a few nodes that will run optimization of the models parameters over small batches of data that are collected continuously.
 
 :::workflow
-![Model Optimization for Mouse Foraging Behaviour](ModelOptimizationForagingMouse.bonsai)
+![Online Learning and Kinematics Inference of a Foraging Mouse](OnlineLearningAndKinematicsInference.bonsai)
 :::
 
 You can find specific information about the tracking workflow and model inference workflow by going to the Foraging Mouse example. In addition to the tracking workflow and model inference, only a few nodes are needed to perform optimization of the models parameters. There is a specific branch of the workflow where the `Observation` subject is subscribed to after the `ModelParams` fires, and gets passed to a `RunOptimization` node. This node has a number of properties which me be useful, such as the batch size of the training data, which parameters to optimize, etc. Once the data buffer is full, the model runs optimization asynchronously. You should see in the beginning that the model will tend to overshoot the position of the mouse, since the parameters are not well adjusted. Over time, the output of the model will improve and the inference of the model will more closely track the position of the mouse with multiple learning iterations.
