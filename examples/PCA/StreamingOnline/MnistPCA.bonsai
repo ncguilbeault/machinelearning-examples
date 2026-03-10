@@ -84,7 +84,7 @@
               <p2:Tolerance>1E-05</p2:Tolerance>
               <p2:Rho xsi:nil="true" />
               <p2:Kappa>0.99</p2:Kappa>
-              <p2:TimeOffset xsi:nil="true" />
+              <p2:SampleOffset xsi:nil="true" />
               <p2:ReorthogonalizePeriod xsi:nil="true" />
               <p2:LearningRate>0.01</p2:LearningRate>
             </Expression>

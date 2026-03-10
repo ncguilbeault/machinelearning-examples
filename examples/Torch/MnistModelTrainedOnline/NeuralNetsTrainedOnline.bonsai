@@ -12,6 +12,7 @@
                  xmlns:p6="clr-namespace:Bonsai.ML.Torch.NeuralNets.Optimizer;assembly=Bonsai.ML.Torch"
                  xmlns:p7="clr-namespace:Bonsai.ML.Torch.NeuralNets.Loss;assembly=Bonsai.ML.Torch"
                  xmlns:gui="clr-namespace:Bonsai.Gui;assembly=Bonsai.Gui"
+                 xmlns:ui="clr-namespace:Bonsai.Design;assembly=Bonsai.Design"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
@@ -451,9 +452,7 @@
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:WithLatestFrom" />
             </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p3:Forward" />
-            </Expression>
+            <Expression xsi:type="p3:ForwardBuilder" />
             <Expression xsi:type="SubscribeSubject">
               <Name>CPU</Name>
             </Expression>
@@ -519,7 +518,7 @@
             <Expression xsi:type="rx:BehaviorSubject">
               <Name>Optimizer</Name>
             </Expression>
-            <Expression xsi:type="p3:LossModuleBuilder">
+            <Expression xsi:type="p3:LossBuilder">
               <p3:LossModule xsi:type="p7:NegativeLogLikelihood">
                 <p7:Weight />
                 <p7:Reduction>Mean</p7:Reduction>
@@ -595,9 +594,7 @@
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:WithLatestFrom" />
             </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p3:Forward" />
-            </Expression>
+            <Expression xsi:type="p3:ForwardBuilder" />
             <Expression xsi:type="SubscribeSubject">
               <Name>ProcessedLabel</Name>
             </Expression>
@@ -637,9 +634,7 @@
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:WithLatestFrom" />
             </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p3:Forward" />
-            </Expression>
+            <Expression xsi:type="p3:ForwardBuilder" />
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p3:Backward" />
             </Expression>
@@ -904,6 +899,13 @@
           </Edges>
         </Workflow>
       </Expression>
+      <Expression xsi:type="ui:VisualizerWindow">
+        <ui:Text>Visualizer</ui:Text>
+        <ui:Visible>true</ui:Visible>
+        <ui:Location xsi:nil="true" />
+        <ui:Size xsi:nil="true" />
+        <ui:WindowState xsi:nil="true" />
+      </Expression>
       <Expression xsi:type="GroupWorkflow">
         <Name>Controller</Name>
         <Workflow>
@@ -969,7 +971,17 @@
           </Edges>
         </Workflow>
       </Expression>
+      <Expression xsi:type="ui:VisualizerWindow">
+        <ui:Text>Controller</ui:Text>
+        <ui:Visible>true</ui:Visible>
+        <ui:Location xsi:nil="true" />
+        <ui:Size xsi:nil="true" />
+        <ui:WindowState xsi:nil="true" />
+      </Expression>
     </Nodes>
-    <Edges />
+    <Edges>
+      <Edge From="5" To="6" Label="Source1" />
+      <Edge From="7" To="8" Label="Source1" />
+    </Edges>
   </Workflow>
 </WorkflowBuilder>

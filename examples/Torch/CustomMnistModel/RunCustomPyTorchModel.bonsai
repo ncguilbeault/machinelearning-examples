@@ -3,8 +3,8 @@
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:p1="clr-namespace:;assembly=Extensions"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
-                 xmlns:p2="clr-namespace:Bonsai.ML.Torch;assembly=Bonsai.ML.Torch"
-                 xmlns:p3="clr-namespace:Bonsai.ML.Torch.NeuralNets;assembly=Bonsai.ML.Torch"
+                 xmlns:p2="clr-namespace:Bonsai.ML.Torch.NeuralNets;assembly=Bonsai.ML.Torch"
+                 xmlns:p3="clr-namespace:Bonsai.ML.Torch;assembly=Bonsai.ML.Torch"
                  xmlns:p4="clr-namespace:Bonsai.ML.Torch.Vision;assembly=Bonsai.ML.Torch"
                  xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
                  xmlns:gui="clr-namespace:Bonsai.Gui;assembly=Bonsai.Gui"
@@ -74,24 +74,12 @@
         <Name>LoadModel</Name>
         <Workflow>
           <Nodes>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p2:CreateTensor">
-                <p2:Type>Float32</p2:Type>
-                <p2:Values />
-              </Combinator>
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p2:CreateTensor">
-                <p2:Type>Float32</p2:Type>
-                <p2:Values />
-              </Combinator>
-            </Expression>
             <Expression xsi:type="ExternalizedMapping">
               <Property Name="ScriptModulePath" />
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p3:LoadScriptModule">
-                <p3:ScriptModulePath>models/model.torchscript</p3:ScriptModulePath>
+              <Combinator xsi:type="p2:LoadScriptModule">
+                <p2:ScriptModulePath>models/model.torchscript</p2:ScriptModulePath>
               </Combinator>
             </Expression>
             <Expression xsi:type="rx:BehaviorSubject">
@@ -99,10 +87,8 @@
             </Expression>
           </Nodes>
           <Edges>
-            <Edge From="0" To="3" Label="Source1" />
-            <Edge From="1" To="3" Label="Source2" />
-            <Edge From="2" To="3" Label="Source3" />
-            <Edge From="3" To="4" Label="Source1" />
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="1" To="2" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
@@ -117,14 +103,14 @@
               <Selector>Item1</Selector>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p2:ToTensor">
-                <p2:Type xsi:nil="true" />
+              <Combinator xsi:type="p3:ToTensor">
+                <p3:Type xsi:nil="true" />
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p2:CreateTensor">
-                <p2:Type>Float32</p2:Type>
-                <p2:Values>256</p2:Values>
+              <Combinator xsi:type="p3:CreateTensor">
+                <p3:Type>Float32</p3:Type>
+                <p3:Values>256</p3:Values>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -132,13 +118,13 @@
             </Expression>
             <Expression xsi:type="Divide" />
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p2:Reshape">
-                <p2:Dimensions>
-                  <p2:long>1</p2:long>
-                  <p2:long>1</p2:long>
-                  <p2:long>28</p2:long>
-                  <p2:long>28</p2:long>
-                </p2:Dimensions>
+              <Combinator xsi:type="p3:Reshape">
+                <p3:Dimensions>
+                  <p3:long>1</p3:long>
+                  <p3:long>1</p3:long>
+                  <p3:long>28</p3:long>
+                  <p3:long>28</p3:long>
+                </p3:Dimensions>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -191,9 +177,7 @@
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:WithLatestFrom" />
             </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p3:Forward" />
-            </Expression>
+            <Expression xsi:type="p2:ForwardBuilder" />
             <Expression xsi:type="scr:ExpressionTransform">
               <scr:Expression>it.argmax().ReadCpuInt64(0)</scr:Expression>
             </Expression>
@@ -234,16 +218,16 @@
               <Name>Image</Name>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p2:Reshape">
-                <p2:Dimensions>
-                  <p2:long>28</p2:long>
-                  <p2:long>28</p2:long>
-                  <p2:long>1</p2:long>
-                </p2:Dimensions>
+              <Combinator xsi:type="p3:Reshape">
+                <p3:Dimensions>
+                  <p3:long>28</p3:long>
+                  <p3:long>28</p3:long>
+                  <p3:long>1</p3:long>
+                </p3:Dimensions>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p2:ToImage" />
+              <Combinator xsi:type="p3:ToImage" />
             </Expression>
             <Expression xsi:type="VisualizerMapping" />
             <Expression xsi:type="gui:TableLayoutPanelBuilder">

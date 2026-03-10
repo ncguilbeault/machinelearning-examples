@@ -29,18 +29,6 @@
         <scr:Expression>it.T.unsqueeze(0)</scr:Expression>
       </Expression>
       <Expression xsi:type="Combinator">
-        <Combinator xsi:type="p1:CreateTensor">
-          <p1:Type>Float32</p1:Type>
-          <p1:Values />
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="p1:CreateTensor">
-          <p1:Type>Float32</p1:Type>
-          <p1:Values />
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="Combinator">
         <Combinator xsi:type="p2:LoadScriptModule">
           <p2:ScriptModulePath>models/MiDaS_small.pt</p2:ScriptModulePath>
         </Combinator>
@@ -48,9 +36,7 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:WithLatestFrom" />
       </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="p2:Forward" />
-      </Expression>
+      <Expression xsi:type="p2:ForwardBuilder" />
       <Expression xsi:type="scr:ExpressionTransform">
         <scr:Expression>it.T</scr:Expression>
       </Expression>
@@ -62,13 +48,11 @@
       <Edge From="0" To="1" Label="Source1" />
       <Edge From="1" To="2" Label="Source1" />
       <Edge From="2" To="3" Label="Source1" />
-      <Edge From="3" To="7" Label="Source1" />
-      <Edge From="4" To="6" Label="Source1" />
-      <Edge From="5" To="6" Label="Source2" />
-      <Edge From="6" To="7" Label="Source2" />
+      <Edge From="3" To="5" Label="Source1" />
+      <Edge From="4" To="5" Label="Source2" />
+      <Edge From="5" To="6" Label="Source1" />
+      <Edge From="6" To="7" Label="Source1" />
       <Edge From="7" To="8" Label="Source1" />
-      <Edge From="8" To="9" Label="Source1" />
-      <Edge From="9" To="10" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>
