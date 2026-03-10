@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<WorkflowBuilder Version="2.8.5"
+<WorkflowBuilder Version="2.9.0"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:p1="clr-namespace:;assembly=Extensions"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
@@ -235,7 +235,7 @@
               </PropertyMappings>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p3:LoadModuleFromArchitecture">
+              <Combinator xsi:type="p3:LoadModuleArchitecture">
                 <p3:ModelArchitecture>Mnist</p3:ModelArchitecture>
                 <p3:ModelWeightsPath>../../../datasets/fashion-mnist.model.bin</p3:ModelWeightsPath>
                 <p3:NumClasses>10</p3:NumClasses>
@@ -363,10 +363,8 @@
             <Expression xsi:type="SubscribeSubject">
               <Name>Model</Name>
             </Expression>
-            <Expression xsi:type="PropertyMapping">
-              <PropertyMappings>
-                <Property Name="Model" />
-              </PropertyMappings>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:WithLatestFrom" />
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p3:Forward" />
@@ -390,9 +388,9 @@
             </Expression>
           </Nodes>
           <Edges>
-            <Edge From="0" To="3" Label="Source1" />
-            <Edge From="1" To="2" Label="Source1" />
-            <Edge From="2" To="3" Label="Source2" />
+            <Edge From="0" To="2" Label="Source1" />
+            <Edge From="1" To="2" Label="Source2" />
+            <Edge From="2" To="3" Label="Source1" />
             <Edge From="3" To="6" Label="Source1" />
             <Edge From="4" To="5" Label="Source1" />
             <Edge From="5" To="6" Label="Source2" />
