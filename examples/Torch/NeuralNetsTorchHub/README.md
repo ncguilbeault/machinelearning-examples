@@ -9,7 +9,7 @@ This example uses the [uv manager](https://docs.astral.sh/uv/) to manage package
 The folder contains a Python script which uses the [PyTorch](https://pytorch.org) library. The python script, `torchhub_download.py`, is designed to automatically download the `MiDaS` PyTorch model from the web and place it into the correct folder for the Bonsai workflow. You can bootstrap the Python environment and run the script using uv. For this, open a terminal, change to the example directory, and run the script using uv:
 
 ```cmd
-cd examples/Torch/Neural
+cd examples/Torch/NeuralNetsTorchHub
 uv run torchhub_download.py
 ```
 
