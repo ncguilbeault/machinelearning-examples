@@ -1,7 +1,7 @@
 - name: Overview
   href: ../README.md
 
-- name: Linear Dynamical Systems
+- name: Linear Dynamical Systems (LDS)
   items:
     - name: Kinematics
       items:
@@ -11,27 +11,29 @@
           href: ../examples/LinearDynamicalSystems/Kinematics/ZebrafishCentroidTracking/README.md
         - name: Foraging Mouse
           href: ../examples/LinearDynamicalSystems/Kinematics/ForagingMouse/README.md
-        - name: Optimizing Model Parameters for Foraging Mouse
-          href: ../examples/LinearDynamicalSystems/Kinematics/ModelOptimizationForagingMouse/README.md
+        - name: Online Learning and Kinematics Inference of Foraging Mouse
+          href: ../examples/LinearDynamicalSystems/Kinematics/OnlineLearningAndKinematicsInference/README.md
         - name: Forecasting Foraging Mouse Kinematics
           href: ../examples/LinearDynamicalSystems/Kinematics/ForecastingForagingMouse/README.md
+
     - name: Linear Regression
       items:
         - name: Simulated Data
           href: ../examples/LinearDynamicalSystems/LinearRegression/SimulatedData/README.md
         - name: Receptive Field Simple Cell
           href: ../examples/LinearDynamicalSystems/LinearRegression/ReceptiveFieldSimpleCell/README.md
+
     - name: Neural Latents
       items:
         - name: Estimating Parameters of LDS
           href: ../examples/LinearDynamicalSystems/NeuralLatents/EstimatingParameters/README.md
         - name: Online Filtering
           href: ../examples/LinearDynamicalSystems/NeuralLatents/OnlineFiltering/README.md
+        - name: Inferring Latents of a Simulated Dynamical System
+          href: ../examples/LinearDynamicalSystems/NeuralLatents/SimulatedDynamics/README.md
 
-- name: Hidden Markov Models
+- name: Hidden Markov Models (HMM)
   items:
-    - name: Getting Started
-      href: ../examples/HiddenMarkovModels/README.md
     - name: Simulated Data
       href: ../examples/HiddenMarkovModels/SimulatedData/README.md
     - name: Inferring Behavioral State from Kinematics
@@ -39,21 +41,31 @@
     - name: Extended Model Configuration
       href: ../examples/HiddenMarkovModels/ExtendedModelConfiguration/README.md
 
-- name: Torch
+- name: Neural Networks
   items:
     - name: Linear Regression
-      href: ../examples/Torch/LinearRegression/README.md
-
-    - name: Neural Networks
       items:
-        - name: Exporting a PyTorch Model
-          href: ../examples/Torch/CustomPyTorchModel/README.md
-        - name: Running a Pretrained Neural Network for Image Classification
-          href: ../examples/Torch/NeuralNetsPretrainedModel/README.md
-        - name: Downloading and Running a TorchHub Model
-          href: ../examples/Torch/NeuralNetsTorchHub/README.md
-        - name: Training a Neural Network Online
-          href: ../examples/Torch/NeuralNetsTrainedOnline/README.md
+        - name: Simple Linear Regression using Ordinary Least Squares and Torch
+          href: ../examples/Torch/LinearRegression/SimpleOrdinaryLeastSquares/README.md
+
+    - name: Image Classification
+      items:
+        - name: Creating a Custom CNN for MNIST Classification
+          href: ../examples/Torch/ImageClassification/CustomMnistModel/README.md
+        - name: Running a Pretrained Model for MNIST Classification
+          href: ../examples/Torch/ImageClassification/PretrainedMnistModel/README.md
+        - name: Training an MNIST Classifier Online
+          href: ../examples/Torch/ImageClassification/MnistModelTrainedOnline/README.md
+
+    - name: Depth Image Processing
+      items:
+        - name: Inferring Depth from Stereo Images using a Torch Hub Model
+          href: ../examples/Torch/DepthImageProcessing/TorchHubDepthInferenceFromStereo/README.md
+
+    - name: Recurrent Neural Networks
+      items:
+        - name: Simulated Data
+          href: ../examples/Torch/RecurrentNeuralNetworks/TrainedOnline/README.md
 
 - name: Point Process Decoder
   items:
@@ -65,3 +77,10 @@
       href: ../examples/PointProcessDecoder/DecodePositionFromStriatumSortedUnits/README.md
     - name: Classify Dynamics and Decode Position from Hippocampal Sorted Units
       href: ../examples/PointProcessDecoder/ClassifyPositionFromHippocampusSortedUnits/README.md
+
+- name: Principal Component Analysis (PCA)
+  items:
+    - name: Batch Fitting of PCA on MNIST Data
+      href: ../examples/PrincipalComponentAnalysis/BatchFit/README.md
+    - name: Online Fitting of PCA on MNIST Data
+      href: ../examples/PrincipalComponentAnalysis/StreamingOnline/README.md
