@@ -46,26 +46,26 @@
     - name: Linear Regression
       items:
         - name: Simple Linear Regression using Ordinary Least Squares and Torch
-          href: ../examples/Torch/LinearRegression/SimpleOrdinaryLeastSquares/README.md
+          href: ../examples/NeuralNetworks/LinearRegression/SimpleOrdinaryLeastSquares/README.md
 
     - name: Image Classification
       items:
         - name: Creating a Custom CNN for MNIST Classification
-          href: ../examples/Torch/ImageClassification/CustomMnistModel/README.md
+          href: ../examples/NeuralNetworks/ImageClassification/CustomMnistModel/README.md
         - name: Running a Pretrained Model for MNIST Classification
-          href: ../examples/Torch/ImageClassification/PretrainedMnistModel/README.md
+          href: ../examples/NeuralNetworks/ImageClassification/PretrainedMnistModel/README.md
         - name: Training an MNIST Classifier Online
-          href: ../examples/Torch/ImageClassification/MnistModelTrainedOnline/README.md
+          href: ../examples/NeuralNetworks/ImageClassification/MnistModelTrainedOnline/README.md
 
     - name: Depth Image Processing
       items:
         - name: Inferring Depth from Stereo Images using a Torch Hub Model
-          href: ../examples/Torch/DepthImageProcessing/TorchHubDepthInferenceFromStereo/README.md
+          href: ../examples/NeuralNetworks/DepthImageProcessing/TorchHubDepthInferenceFromStereo/README.md
 
     - name: Recurrent Neural Networks
       items:
         - name: Simulated Data
-          href: ../examples/Torch/RecurrentNeuralNetworks/TrainedOnline/README.md
+          href: ../examples/NeuralNetworks/RecurrentNeuralNetworks/TrainedOnline/README.md
 
 - name: Point Process Decoder
   items:

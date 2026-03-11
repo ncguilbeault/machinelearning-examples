@@ -45,3 +45,7 @@ The workflow can be broken down into the following sections.
 3. `TrainingSpecification` - Contains our definitions of the training procedure, including the criterion we are going to use, the optimizer, and scheduler. Our loss function will compute the mean squared error, and we use the Adam optimizer to back propagate our error through the network.
 4. `TrainingProcedure` - The training procedure takes our input variable $x_t$ and runs inference using the current input and the previous hidden state $h_{t-1}$. We then compute the mean squared error of our prediction $\hat{y}$ with the target variable $y$ and accumulate the loss over successive inputs. Once we reach the desired number of steps or batch size, we compute our gradients and back propagate the error through the network. Since we are recursively feeding the hidden state at each time point, it's important that we detach the hidden state from the computational graph that torch maintains in order to compute the gradients before we set our gradients to 0. Finally, we reset our accumulated loss and hidden state back to their initial values.
 5. `Visualizer` - Displays the target value, $y$, alongside our model's prediction $\hat{y}$. It also displays the total loss that was incurred for each batch.
+
+### Demo
+
+![](./TrainingRnn.gif)

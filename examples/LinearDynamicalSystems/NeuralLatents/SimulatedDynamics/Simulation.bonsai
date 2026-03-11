@@ -31,7 +31,7 @@
               <Name>NumNeurons</Name>
             </Expression>
             <Expression xsi:type="ExternalizedMapping">
-              <Property Name="Value" DisplayName="w" />
+              <Property Name="Value" DisplayName="W" />
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="DoubleProperty">
@@ -47,10 +47,10 @@
               </Combinator>
             </Expression>
             <Expression xsi:type="rx:BehaviorSubject">
-              <Name>w</Name>
+              <Name>W</Name>
             </Expression>
             <Expression xsi:type="ExternalizedMapping">
-              <Property Name="Value" DisplayName="rho" />
+              <Property Name="Value" DisplayName="Rho" />
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="DoubleProperty">
@@ -63,10 +63,10 @@
               </Combinator>
             </Expression>
             <Expression xsi:type="rx:BehaviorSubject">
-              <Name>rho</Name>
+              <Name>Rho</Name>
             </Expression>
             <Expression xsi:type="ExternalizedMapping">
-              <Property Name="Value" DisplayName="sigma1" />
+              <Property Name="Value" DisplayName="Sigma1" />
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="DoubleProperty">
@@ -79,10 +79,10 @@
               </Combinator>
             </Expression>
             <Expression xsi:type="rx:BehaviorSubject">
-              <Name>sigma1</Name>
+              <Name>Sigma1</Name>
             </Expression>
             <Expression xsi:type="ExternalizedMapping">
-              <Property Name="Value" DisplayName="sigma2" />
+              <Property Name="Value" DisplayName="Sigma2" />
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="DoubleProperty">
@@ -95,7 +95,7 @@
               </Combinator>
             </Expression>
             <Expression xsi:type="rx:BehaviorSubject">
-              <Name>sigma2</Name>
+              <Name>Sigma2</Name>
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p2:CreateGenerator">
@@ -106,7 +106,7 @@
               <Name>Generator</Name>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
-              <Name>w</Name>
+              <Name>W</Name>
             </Expression>
             <Expression xsi:type="scr:ExpressionTransform">
               <scr:Expression>it.cos().unsqueeze(0)</scr:Expression>
@@ -115,7 +115,7 @@
               <Name>cosw</Name>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
-              <Name>w</Name>
+              <Name>W</Name>
             </Expression>
             <Expression xsi:type="scr:ExpressionTransform">
               <scr:Expression>it.sin().unsqueeze(0)</scr:Expression>
@@ -162,7 +162,7 @@
               </Combinator>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
-              <Name>rho</Name>
+              <Name>Rho</Name>
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:WithLatestFrom" />
@@ -181,7 +181,7 @@
               </Combinator>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
-              <Name>sigma1</Name>
+              <Name>Sigma1</Name>
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Zip" />
@@ -223,7 +223,7 @@
               </Combinator>
             </Expression>
             <Expression xsi:type="SubscribeSubject">
-              <Name>sigma2</Name>
+              <Name>Sigma2</Name>
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Zip" />
@@ -571,42 +571,6 @@
         </Workflow>
       </Expression>
       <Expression xsi:type="GroupWorkflow">
-        <Name>CreateKalmanFilter</Name>
-        <Workflow>
-          <Nodes>
-            <Expression xsi:type="SubscribeSubject">
-              <Name>NumNeurons</Name>
-            </Expression>
-            <Expression xsi:type="PropertyMapping">
-              <PropertyMappings>
-                <Property Name="NumObservations" />
-              </PropertyMappings>
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p5:CreateKalmanFilter">
-                <p5:Type>Float32</p5:Type>
-                <p5:NumStates>2</p5:NumStates>
-                <p5:NumObservations>100</p5:NumObservations>
-                <p5:TransitionMatrix />
-                <p5:MeasurementFunction />
-                <p5:ProcessNoiseVariance />
-                <p5:MeasurementNoiseVariance />
-                <p5:InitialMean />
-                <p5:InitialCovariance />
-                <p5:StateOffset />
-                <p5:ObservationOffset />
-              </Combinator>
-            </Expression>
-            <Expression xsi:type="WorkflowOutput" />
-          </Nodes>
-          <Edges>
-            <Edge From="0" To="1" Label="Source1" />
-            <Edge From="1" To="2" Label="Source1" />
-            <Edge From="2" To="3" Label="Source1" />
-          </Edges>
-        </Workflow>
-      </Expression>
-      <Expression xsi:type="GroupWorkflow">
         <Name>LearnParameters</Name>
         <Workflow>
           <Nodes>
@@ -672,6 +636,21 @@
             <Expression xsi:type="MemberSelector">
               <Selector>Parameters</Selector>
             </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="p5:CreateKalmanFilter">
+                <p5:Type>Float32</p5:Type>
+                <p5:NumStates xsi:nil="true" />
+                <p5:NumObservations xsi:nil="true" />
+                <p5:TransitionMatrix />
+                <p5:MeasurementFunction />
+                <p5:ProcessNoiseVariance />
+                <p5:MeasurementNoiseVariance />
+                <p5:InitialMean />
+                <p5:InitialCovariance />
+                <p5:StateOffset />
+                <p5:ObservationOffset />
+              </Combinator>
+            </Expression>
             <Expression xsi:type="rx:BehaviorSubject">
               <Name>KalmanFilter</Name>
             </Expression>
@@ -687,6 +666,7 @@
             <Edge From="7" To="8" Label="Source1" />
             <Edge From="8" To="9" Label="Source1" />
             <Edge From="9" To="10" Label="Source1" />
+            <Edge From="10" To="11" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
@@ -981,7 +961,7 @@
               <gui:Minimum>0.1</gui:Minimum>
               <gui:Maximum>100</gui:Maximum>
               <gui:DecimalPlaces xsi:nil="true" />
-              <gui:Value>2.96109785202864</gui:Value>
+              <gui:Value>100</gui:Value>
             </Expression>
             <Expression xsi:type="rx:Sink">
               <Name>UpdateSliderValue</Name>
@@ -1039,7 +1019,7 @@
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
                       <rx:DueTime>PT0S</rx:DueTime>
-                      <rx:Period>PT0.338S</rx:Period>
+                      <rx:Period>PT0.01S</rx:Period>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="WorkflowOutput" />
@@ -1150,8 +1130,8 @@
       </Expression>
     </Nodes>
     <Edges>
-      <Edge From="4" To="5" Label="Source1" />
-      <Edge From="6" To="7" Label="Source1" />
+      <Edge From="3" To="4" Label="Source1" />
+      <Edge From="5" To="6" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>
