@@ -220,7 +220,7 @@
         <Name>TrainingDefinition</Name>
         <Workflow>
           <Nodes>
-            <Expression xsi:type="p2:LossModuleBuilder">
+            <Expression xsi:type="p2:LossBuilder">
               <p2:LossModule xsi:type="p5:MeanSquaredError">
                 <p5:Reduction>None</p5:Reduction>
               </p2:LossModule>
@@ -320,9 +320,7 @@
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:WithLatestFrom" />
                   </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p2:Forward" />
-                  </Expression>
+                  <Expression xsi:type="p2:ForwardBuilder" />
                   <Expression xsi:type="rx:Sink">
                     <Name>UpdateHiddenState</Name>
                     <Workflow>
@@ -354,9 +352,7 @@
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:WithLatestFrom" />
                   </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p2:Forward" />
-                  </Expression>
+                  <Expression xsi:type="p2:ForwardBuilder" />
                   <Expression xsi:type="WorkflowOutput" />
                 </Nodes>
                 <Edges>
@@ -396,9 +392,7 @@
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:WithLatestFrom" />
                   </Expression>
-                  <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p2:Forward" />
-                  </Expression>
+                  <Expression xsi:type="p2:ForwardBuilder" />
                   <Expression xsi:type="SubscribeSubject">
                     <Name>_loss</Name>
                   </Expression>
