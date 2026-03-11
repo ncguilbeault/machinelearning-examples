@@ -5,8 +5,8 @@
                  xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
                  xmlns:p1="clr-namespace:Bonsai.ML.Torch;assembly=Bonsai.ML.Torch"
                  xmlns:p2="clr-namespace:Bonsai.ML.Torch.Random;assembly=Bonsai.ML.Torch"
-                 xmlns:p3="clr-namespace:Bonsai.ML.Torch.NeuralNets.Module;assembly=Bonsai.ML.Torch"
-                 xmlns:p4="clr-namespace:Bonsai.ML.Torch.NeuralNets;assembly=Bonsai.ML.Torch"
+                 xmlns:p3="clr-namespace:Bonsai.ML.Torch.NeuralNets;assembly=Bonsai.ML.Torch"
+                 xmlns:p4="clr-namespace:Bonsai.ML.Torch.NeuralNets.Linear;assembly=Bonsai.ML.Torch"
                  xmlns:zg="clr-namespace:Bonsai.Gui.ZedGraph;assembly=Bonsai.Gui.ZedGraph"
                  xmlns:p5="clr-namespace:Bonsai.ML.Lds.Torch;assembly=Bonsai.ML.Lds.Torch"
                  xmlns:viz="clr-namespace:Bonsai.Design.Visualizers;assembly=Bonsai.Design.Visualizers"
@@ -98,7 +98,7 @@
               <Name>sigma2</Name>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p2:Generator">
+              <Combinator xsi:type="p2:CreateGenerator">
                 <p2:Seed>0</p2:Seed>
               </Combinator>
             </Expression>
@@ -243,13 +243,13 @@
                 <Property Name="OutputSize" />
               </PropertyMappings>
             </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p3:Linear">
-                <p3:InputSize>2</p3:InputSize>
-                <p3:OutputSize>100</p3:OutputSize>
-                <p3:HasBias>true</p3:HasBias>
-                <p3:Type xsi:nil="true" />
-              </Combinator>
+            <Expression xsi:type="p3:LinearModuleBuilder">
+              <p3:LinearModule xsi:type="p4:Linear">
+                <p4:OutputSize>100</p4:OutputSize>
+                <p4:InputSize>2</p4:InputSize>
+                <p4:HasBias>true</p4:HasBias>
+                <p4:Type xsi:nil="true" />
+              </p3:LinearModule>
             </Expression>
             <Expression xsi:type="rx:BehaviorSubject">
               <Name>C</Name>
@@ -361,14 +361,10 @@
                   <Expression xsi:type="SubscribeSubject">
                     <Name>C</Name>
                   </Expression>
-                  <Expression xsi:type="PropertyMapping">
-                    <PropertyMappings>
-                      <Property Name="Model" />
-                    </PropertyMappings>
-                  </Expression>
                   <Expression xsi:type="Combinator">
-                    <Combinator xsi:type="p4:Forward" />
+                    <Combinator xsi:type="rx:WithLatestFrom" />
                   </Expression>
+                  <Expression xsi:type="p3:ForwardBuilder" />
                   <Expression xsi:type="SubscribeSubject">
                     <Name>Generator</Name>
                   </Expression>
@@ -444,9 +440,9 @@
                   <Edge From="9" To="10" Label="Source1" />
                   <Edge From="10" To="11" Label="Source1" />
                   <Edge From="12" To="13" Label="Source1" />
-                  <Edge From="13" To="16" Label="Source1" />
-                  <Edge From="14" To="15" Label="Source1" />
-                  <Edge From="15" To="16" Label="Source2" />
+                  <Edge From="13" To="15" Label="Source1" />
+                  <Edge From="14" To="15" Label="Source2" />
+                  <Edge From="15" To="16" Label="Source1" />
                   <Edge From="16" To="26" Label="Source1" />
                   <Edge From="17" To="22" Label="Source1" />
                   <Edge From="18" To="19" Label="Source1" />
@@ -597,6 +593,8 @@
                 <p5:MeasurementNoiseVariance />
                 <p5:InitialMean />
                 <p5:InitialCovariance />
+                <p5:StateOffset />
+                <p5:ObservationOffset />
               </Combinator>
             </Expression>
             <Expression xsi:type="rx:BehaviorSubject">
@@ -623,7 +621,7 @@
               <Property Name="Count" DisplayName="BatchSize" />
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p1:Buffer">
+              <Combinator xsi:type="p1:Bind">
                 <p1:Count>1000</p1:Count>
                 <p1:Skip>1</p1:Skip>
               </Combinator>
@@ -636,103 +634,42 @@
             <Expression xsi:type="scr:ExpressionTransform">
               <scr:Expression>it.squeeze(null)</scr:Expression>
             </Expression>
-            <Expression xsi:type="Disable">
-              <Builder xsi:type="Combinator">
-                <Combinator xsi:type="p5:StochasticSubspaceIdentification">
-                  <p5:TargetNumStates>2</p5:TargetNumStates>
-                  <p5:MaxLag>20</p5:MaxLag>
-                  <p5:Threshold>0.1</p5:Threshold>
-                  <p5:EstimateTransitionMatrix>true</p5:EstimateTransitionMatrix>
-                  <p5:EstimateMeasurementFunction>true</p5:EstimateMeasurementFunction>
-                  <p5:EstimateProcessNoiseCovariance>true</p5:EstimateProcessNoiseCovariance>
-                  <p5:EstimateMeasurementNoiseCovariance>true</p5:EstimateMeasurementNoiseCovariance>
-                  <p5:EstimateInitialMean>true</p5:EstimateInitialMean>
-                  <p5:EstimateInitialCovariance>true</p5:EstimateInitialCovariance>
-                </Combinator>
-              </Builder>
-            </Expression>
-            <Expression xsi:type="Disable">
-              <Builder xsi:type="rx:BehaviorSubject">
-                <Name>Result</Name>
-              </Builder>
-            </Expression>
-            <Expression xsi:type="Disable">
-              <Builder xsi:type="MemberSelector">
-                <Selector>SingularValues</Selector>
-              </Builder>
-            </Expression>
-            <Expression xsi:type="Disable">
-              <Builder xsi:type="p1:ConvertToArray">
-                <p1:Type>Float32</p1:Type>
-              </Builder>
-            </Expression>
-            <Expression xsi:type="Disable">
-              <Builder xsi:type="Combinator">
-                <Combinator xsi:type="rx:Concat" />
-              </Builder>
-            </Expression>
-            <Expression xsi:type="Disable">
-              <Builder xsi:type="zg:RollingGraphBuilder">
-                <zg:SymbolType>None</zg:SymbolType>
-                <zg:LineWidth>1</zg:LineWidth>
-                <zg:CurveSettings />
-                <zg:Capacity xsi:nil="true" />
-                <zg:Min xsi:nil="true" />
-                <zg:Max xsi:nil="true" />
-              </Builder>
-            </Expression>
-            <Expression xsi:type="Disable">
-              <Builder xsi:type="WorkflowOutput" />
-            </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="p5:ExpectationMaximization">
-                <p5:MaxIterations>10</p5:MaxIterations>
-                <p5:Tolerance>0.0001</p5:Tolerance>
-                <p5:Verbose>true</p5:Verbose>
+              <Combinator xsi:type="p5:StochasticSubspaceIdentification">
+                <p5:TargetNumStates>2</p5:TargetNumStates>
+                <p5:MaxLag>20</p5:MaxLag>
+                <p5:Threshold>0.1</p5:Threshold>
                 <p5:EstimateTransitionMatrix>true</p5:EstimateTransitionMatrix>
                 <p5:EstimateMeasurementFunction>true</p5:EstimateMeasurementFunction>
                 <p5:EstimateProcessNoiseCovariance>true</p5:EstimateProcessNoiseCovariance>
                 <p5:EstimateMeasurementNoiseCovariance>true</p5:EstimateMeasurementNoiseCovariance>
                 <p5:EstimateInitialMean>true</p5:EstimateInitialMean>
                 <p5:EstimateInitialCovariance>true</p5:EstimateInitialCovariance>
+                <p5:EstimateStateOffset>false</p5:EstimateStateOffset>
+                <p5:EstimateObservationOffset>false</p5:EstimateObservationOffset>
               </Combinator>
+            </Expression>
+            <Expression xsi:type="rx:BehaviorSubject">
+              <Name>Result</Name>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>SingularValues</Selector>
+            </Expression>
+            <Expression xsi:type="p1:ConvertToArray">
+              <p1:Type>Float32</p1:Type>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="IntProperty">
-                <Value>0</Value>
-              </Combinator>
+              <Combinator xsi:type="rx:Concat" />
+            </Expression>
+            <Expression xsi:type="zg:RollingGraphBuilder">
+              <zg:SymbolType>None</zg:SymbolType>
+              <zg:LineWidth>1</zg:LineWidth>
+              <zg:CurveSettings />
+              <zg:Capacity xsi:nil="true" />
+              <zg:Min xsi:nil="true" />
+              <zg:Max xsi:nil="true" />
             </Expression>
             <Expression xsi:type="WorkflowOutput" />
-            <Expression xsi:type="Disable">
-              <Builder xsi:type="SubscribeSubject">
-                <Name>Result</Name>
-              </Builder>
-            </Expression>
-            <Expression xsi:type="Disable">
-              <Builder xsi:type="MemberSelector">
-                <Selector>Parameters</Selector>
-              </Builder>
-            </Expression>
-            <Expression xsi:type="Disable">
-              <Builder xsi:type="Combinator">
-                <Combinator xsi:type="p5:CreateKalmanFilter">
-                  <p5:Type>Float32</p5:Type>
-                  <p5:NumStates>2</p5:NumStates>
-                  <p5:NumObservations>2</p5:NumObservations>
-                  <p5:TransitionMatrix />
-                  <p5:MeasurementFunction />
-                  <p5:ProcessNoiseVariance />
-                  <p5:MeasurementNoiseVariance />
-                  <p5:InitialMean />
-                  <p5:InitialCovariance />
-                </Combinator>
-              </Builder>
-            </Expression>
-            <Expression xsi:type="Disable">
-              <Builder xsi:type="MulticastSubject">
-                <Name>KalmanFilter</Name>
-              </Builder>
-            </Expression>
           </Nodes>
           <Edges>
             <Edge From="0" To="2" Label="Source1" />
@@ -740,18 +677,12 @@
             <Edge From="2" To="3" Label="Source1" />
             <Edge From="3" To="4" Label="Source1" />
             <Edge From="4" To="5" Label="Source1" />
-            <Edge From="4" To="12" Label="Source1" />
-            <Edge From="4" To="13" Label="Source1" />
             <Edge From="5" To="6" Label="Source1" />
             <Edge From="6" To="7" Label="Source1" />
             <Edge From="7" To="8" Label="Source1" />
             <Edge From="8" To="9" Label="Source1" />
             <Edge From="9" To="10" Label="Source1" />
             <Edge From="10" To="11" Label="Source1" />
-            <Edge From="13" To="14" Label="Source1" />
-            <Edge From="15" To="16" Label="Source1" />
-            <Edge From="16" To="17" Label="Source1" />
-            <Edge From="17" To="18" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
@@ -870,7 +801,7 @@
               <Name>InferredLatents</Name>
             </Expression>
             <Expression xsi:type="MemberSelector">
-              <Selector>UpdatedMean</Selector>
+              <Selector>Mean</Selector>
             </Expression>
             <Expression xsi:type="scr:ExpressionTransform">
               <scr:Expression>it.squeeze(null)</scr:Expression>
@@ -1050,7 +981,7 @@
               <gui:Minimum>0.1</gui:Minimum>
               <gui:Maximum>100</gui:Maximum>
               <gui:DecimalPlaces xsi:nil="true" />
-              <gui:Value>100</gui:Value>
+              <gui:Value>73.423277909738715</gui:Value>
             </Expression>
             <Expression xsi:type="rx:Sink">
               <Name>UpdateSliderValue</Name>
@@ -1108,7 +1039,7 @@
                   <Expression xsi:type="Combinator">
                     <Combinator xsi:type="rx:Timer">
                       <rx:DueTime>PT0S</rx:DueTime>
-                      <rx:Period>PT0.01S</rx:Period>
+                      <rx:Period>PT0.014S</rx:Period>
                     </Combinator>
                   </Expression>
                   <Expression xsi:type="WorkflowOutput" />
