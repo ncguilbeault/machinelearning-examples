@@ -1,4 +1,4 @@
-using Bonsai;
+﻿using Bonsai;
 using System;
 using System.ComponentModel;
 using System.Collections.Generic;
@@ -7,6 +7,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Reactive.Linq;
 using OpenCV.Net;
+using TorchVision;
 
 [Combinator]
 [Description("Custom operator to load the MNIST dataset.")]
@@ -85,9 +86,10 @@ public class MnistLoader
         }
     }
 
-    public IObservable<FashionMnistData> Process()
+    public IObservable<MnistData> Process()
     {
-        return Observable.Defer(() => {
+        return Observable.Defer(() =>
+        {
 
             string imagesGZ;
             string labelsGZ;
@@ -106,17 +108,17 @@ public class MnistLoader
             var imagesGZPath = System.IO.Path.Combine(Path, imagesGZ);
             var labelsGZPath = System.IO.Path.Combine(Path, labelsGZ);
 
-            var fashionMnistData = new FashionMnistData();
+            var mnistData = new MnistData();
 
-            DecompressDataAndRead(imagesGZPath, ReadImagesAndAdd, fashionMnistData.Images);
-            DecompressDataAndRead(labelsGZPath, ReadLabelsAndAdd, fashionMnistData.Labels);
+            DecompressDataAndRead(imagesGZPath, ReadImagesAndAdd, mnistData.Images);
+            DecompressDataAndRead(labelsGZPath, ReadLabelsAndAdd, mnistData.Labels);
 
-            return Observable.Return(fashionMnistData);
+            return Observable.Return(mnistData);
         });
     }
 }
 
-public class FashionMnistData
+public class MnistData
 {
     private List<IplImage> _images = new List<IplImage>();
     public List<IplImage> Images
